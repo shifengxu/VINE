@@ -71,7 +71,7 @@ python src/watermark_encoding.py  --ckpt_path ./ckpt/VINE-R              \
                                 
 ```
 ### Image Editing
-We now offer UltraEdit and Image Inversion for image editing, with more options to be added in the future. To edit an image, please use the following commands:
+We now offer [UltraEdit](https://github.com/HaozheZhao/UltraEdit) and Image Inversion for image editing, with more options to be added in the future. To edit an image, please use the following commands:
 ```
 python src/image_editing.py  --model ultraedit                               \
                              --input_path ./example/watermarked_img/2_wm.png \
