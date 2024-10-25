@@ -38,6 +38,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
     - [Watermark Decoding](#watermark-decoding)
     - [Quality Metrics Calculation](#quality-metrics-calculation)
     - [Demo](#demo)
+  - [W-Bench](#w\-bench)
   - [Citation](#citation)
 
 
@@ -71,7 +72,7 @@ python src/watermark_encoding.py  --ckpt_path ./ckpt/VINE-R              \
                                 
 ```
 ### Image Editing
-We now offer [UltraEdit](https://github.com/HaozheZhao/UltraEdit) and Image Inversion for image editing, with more options to be added in the future. To edit an image, please use the following commands:
+We now offer [UltraEdit](https://github.com/HaozheZhao/UltraEdit) and Image Inversion for image editing, with more options to be added soon. To edit an image, please use the following commands:
 ```
 python src/image_editing.py  --model ultraedit                               \
                              --input_path ./example/watermarked_img/2_wm.png \
@@ -97,5 +98,11 @@ python src/quality_metrics.py   --input_path ./example/input/2.png \
 ### Demo
 We provide a complete demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation in `./src/demo.ipynb`. Please refer to it for detailed instructions.
 
+## W-Bench
+Our benchmark is coming soon!
+
 ## Citation
-If you find the repo useful, please consider citing
+If you find the repo useful, please consider citing:
+```
+
+```
