@@ -104,5 +104,10 @@ Our benchmark is coming soon!
 ## Citation
 If you find the repo useful, please consider citing:
 ```
-
+@article{lu2024robust,
+  title={Robust Watermarking Using Generative Priors Against Image Editing: From Benchmarking to Advances},
+  author={Lu, Shilin and Zhou, Zihan and Lu, Jiayou and Zhu, Yuanzhi and Kong, Adams Wai-Kin},
+  journal={arXiv preprint arXiv:2410.18775},
+  year={2024}
+}
 ```
