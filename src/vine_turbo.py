@@ -1,11 +1,12 @@
 import os
-import sys
-import copy
+import sys, gc
 import torch
 import torch.nn as nn
 from transformers import AutoTokenizer, CLIPTextModel
 from diffusers import AutoencoderKL, UNet2DConditionModel
 from peft import LoraConfig
+from huggingface_hub import PyTorchModelHubMixin
+from stega_encoder_decoder import ConditionAdaptor
 p = "src/"
 sys.path.append(p)
 from model import make_1step_sched, my_vae_encoder_fwd, my_vae_decoder_fwd, download_url
@@ -133,81 +134,45 @@ def initialize_vae_no_lora(path="stabilityai/sd-turbo"):
     return vae
 
 
-class VINE_Turbo(torch.nn.Module):
-    def __init__(self, pretrained_path=None):
+class VINE_Turbo(torch.nn.Module, PyTorchModelHubMixin):
+    def __init__(self, ckpt_path=None, device='cuda'):
         super().__init__()
-        self.tokenizer = AutoTokenizer.from_pretrained("stabilityai/sd-turbo", subfolder="tokenizer")
-        self.text_encoder = CLIPTextModel.from_pretrained("stabilityai/sd-turbo", subfolder="text_encoder").cuda()
-        self.sched = make_1step_sched()
-        vae = AutoencoderKL.from_pretrained("stabilityai/sd-turbo", subfolder="vae")
-        unet = UNet2DConditionModel.from_pretrained("stabilityai/sd-turbo", subfolder="unet")
-        vae.encoder.forward = my_vae_encoder_fwd.__get__(vae.encoder, vae.encoder.__class__)
-        vae.decoder.forward = my_vae_decoder_fwd.__get__(vae.decoder, vae.decoder.__class__)
-        # add the skip connection convs
-        vae.decoder.skip_conv_1 = torch.nn.Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1), bias=False).cuda()
-        vae.decoder.skip_conv_2 = torch.nn.Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1), bias=False).cuda()
-        vae.decoder.skip_conv_3 = torch.nn.Conv2d(128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False).cuda()
-        vae.decoder.skip_conv_4 = torch.nn.Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1), bias=False).cuda()
-        vae.decoder.ignore_skip = False
-        self.unet, self.vae = unet, vae
+        tokenizer = AutoTokenizer.from_pretrained("stabilityai/sd-turbo", subfolder="tokenizer", use_fast=False,)
+        text_encoder = CLIPTextModel.from_pretrained("stabilityai/sd-turbo", subfolder="text_encoder")
+        text_encoder.requires_grad_(False)
+        text_encoder.to(device)
+
+        fixed_a2b_tokens = tokenizer("", max_length=tokenizer.model_max_length, padding="max_length", truncation=True, return_tensors="pt").input_ids[0]
+        self.fixed_a2b_emb_base = text_encoder(fixed_a2b_tokens.unsqueeze(0).to(device))[0].detach()
+        del text_encoder, tokenizer, fixed_a2b_tokens  # free up some memory
+        gc.collect()
+        torch.cuda.empty_cache()
+
+        self.sec_encoder = ConditionAdaptor()
+        self.unet = initialize_unet_no_lora()
+        self.vae_a2b = initialize_vae_no_lora()
+        self.vae_enc = VAE_encode(self.vae_a2b)
+        self.vae_dec = VAE_decode(self.vae_a2b)
+        self.sched = make_1step_sched(device)
+        self.timesteps = torch.tensor([self.sched.config.num_train_timesteps - 1] * 1, device=device).long()
         
-        if pretrained_path is not None:
-            sd = torch.load(pretrained_path)
-            self.load_ckpt_from_state_dict(sd)
-            self.timesteps = torch.tensor([999], device="cuda").long()
-            self.caption = None
-            self.direction = None
+        if ckpt_path is not None:
+            self.load_ckpt_from_state_dict(ckpt_path, device)
+            
+    def load_ckpt_from_state_dict(self, ckpt_path, device):
+        self.sec_encoder.load_state_dict(torch.load(os.path.join(ckpt_path, 'ConditionAdaptor.pth')))
+        self.sec_encoder.to(device)
+        self.sec_encoder.eval()
 
-        self.vae_enc.cuda()
-        self.vae_dec.cuda()
-        self.unet.cuda()
-
-    def load_ckpt_from_state_dict(self, sd):
-        lora_conf_encoder = LoraConfig(r=sd["rank_unet"], init_lora_weights="gaussian", target_modules=sd["l_target_modules_encoder"], lora_alpha=sd["rank_unet"])
-        lora_conf_decoder = LoraConfig(r=sd["rank_unet"], init_lora_weights="gaussian", target_modules=sd["l_target_modules_decoder"], lora_alpha=sd["rank_unet"])
-        lora_conf_others = LoraConfig(r=sd["rank_unet"], init_lora_weights="gaussian", target_modules=sd["l_modules_others"], lora_alpha=sd["rank_unet"])
-        self.unet.add_adapter(lora_conf_encoder, adapter_name="default_encoder")
-        self.unet.add_adapter(lora_conf_decoder, adapter_name="default_decoder")
-        self.unet.add_adapter(lora_conf_others, adapter_name="default_others")
-        for n, p in self.unet.named_parameters():
-            name_sd = n.replace(".default_encoder.weight", ".weight")
-            if "lora" in n and "default_encoder" in n:
-                p.data.copy_(sd["sd_encoder"][name_sd])
-        for n, p in self.unet.named_parameters():
-            name_sd = n.replace(".default_decoder.weight", ".weight")
-            if "lora" in n and "default_decoder" in n:
-                p.data.copy_(sd["sd_decoder"][name_sd])
-        for n, p in self.unet.named_parameters():
-            name_sd = n.replace(".default_others.weight", ".weight")
-            if "lora" in n and "default_others" in n:
-                p.data.copy_(sd["sd_other"][name_sd])
-        self.unet.set_adapter(["default_encoder", "default_decoder", "default_others"])
-
-        vae_lora_config = LoraConfig(r=sd["rank_vae"], init_lora_weights="gaussian", target_modules=sd["vae_lora_target_modules"])
-        self.vae.add_adapter(vae_lora_config, adapter_name="vae_skip")
-        self.vae.decoder.gamma = 1
-        self.vae_enc = VAE_encode(self.vae)
-        self.vae_enc.load_state_dict(sd["sd_vae_enc"])
-        self.vae_dec = VAE_decode(self.vae)
-        self.vae_dec.load_state_dict(sd["sd_vae_dec"])
-
-    def load_ckpt_from_url(self, url, ckpt_folder):
-        os.makedirs(ckpt_folder, exist_ok=True)
-        outf = os.path.join(ckpt_folder, os.path.basename(url))
-        download_url(url, outf)
-        sd = torch.load(outf)
-        self.load_ckpt_from_state_dict(sd)
-
-    @staticmethod
-    def forward_with_networks(x, direction, vae_enc, unet, vae_dec, sched, timesteps, text_emb, secret=None, sec_encoder=None):
-        B = x.shape[0]
-        assert direction in ["a2b", "b2a"]
-        x_sec = sec_encoder(secret, x)
-        x_enc = vae_enc(x_sec, direction=direction).to(x.dtype)
-        model_pred = unet(x_enc, timesteps, encoder_hidden_states=text_emb,).sample.to(x.dtype)
-        x_out = torch.stack([sched.step(model_pred[i], timesteps[i], x_enc[i], return_dict=True).prev_sample for i in range(B)])
-        x_out_decoded = vae_dec(x_out, direction=direction).to(x.dtype)
-        return x_out_decoded
+        self.unet.load_state_dict(torch.load(os.path.join(ckpt_path, 'UNet2DConditionModel.pth')))
+        self.unet.to(device)
+        self.unet.requires_grad_(False)
+        self.unet.eval()
+        
+        self.vae_a2b.load_state_dict(torch.load(os.path.join(ckpt_path, 'vae.pth')))
+        self.vae_a2b.to(device)
+        self.vae_a2b.requires_grad_(False)
+        self.vae_a2b.eval()
 
     @staticmethod
     def get_traininable_params(unet=None, vae_a2b=None, vae_b2a=None):
@@ -248,17 +213,11 @@ class VINE_Turbo(torch.nn.Module):
             
         return params_gen
 
-    def forward(self, x_t, direction=None, caption=None, caption_emb=None):
-        if direction is None:
-            assert self.direction is not None
-            direction = self.direction
-        if caption is None and caption_emb is None:
-            assert self.caption is not None
-            caption = self.caption
-        if caption_emb is not None:
-            caption_enc = caption_emb
-        else:
-            caption_tokens = self.tokenizer(caption, max_length=self.tokenizer.model_max_length,
-                    padding="max_length", truncation=True, return_tensors="pt").input_ids.to(x_t.device)
-            caption_enc = self.text_encoder(caption_tokens)[0].detach().clone()
-        return self.forward_with_networks(x_t, direction, self.vae_enc, self.unet, self.vae_dec, self.sched, self.timesteps, caption_enc)
+    def forward(self, x, secret=None):
+        B = x.shape[0]
+        x_sec = self.sec_encoder(secret, x)
+        x_enc = self.vae_enc(x_sec, direction="a2b").to(x.dtype)
+        model_pred = self.unet(x_enc, self.timesteps, encoder_hidden_states=self.fixed_a2b_emb_base,).sample.to(x.dtype)
+        x_out = torch.stack([self.sched.step(model_pred[i], self.timesteps[i], x_enc[i], return_dict=True).prev_sample for i in range(B)])
+        x_out_decoded = self.vae_dec(x_out, direction="a2b").to(x.dtype)
+        return x_out_decoded

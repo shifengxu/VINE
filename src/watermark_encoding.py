@@ -1,8 +1,6 @@
-import os, gc, torch, time, argparse
-from transformers import AutoTokenizer, CLIPTextModel
-from stega_encoder_decoder import ConditionAdaptor
-from model import make_1step_sched
-from vine_turbo import VINE_Turbo, VAE_encode, VAE_decode, initialize_unet_no_lora, initialize_vae_no_lora
+import os, torch, time, argparse
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+from vine_turbo import VINE_Turbo
 from accelerate.utils import set_seed
 from PIL import Image
 from torchvision import transforms
@@ -10,39 +8,8 @@ from torchvision import transforms
 
 def main(args, device):
     ### ============= load model =============
-    noise_scheduler_1step = make_1step_sched(device)
-    timesteps_val = torch.tensor([noise_scheduler_1step.config.num_train_timesteps - 1] * 1, device=device).long()
-
-    tokenizer = AutoTokenizer.from_pretrained("stabilityai/sd-turbo", subfolder="tokenizer", use_fast=False,)
-    text_encoder = CLIPTextModel.from_pretrained("stabilityai/sd-turbo", subfolder="text_encoder")
-    text_encoder.requires_grad_(False)
-    text_encoder.to(device)
-
-    fixed_a2b_tokens = tokenizer("", max_length=tokenizer.model_max_length, padding="max_length", truncation=True, return_tensors="pt").input_ids[0]
-    fixed_a2b_emb_base = text_encoder(fixed_a2b_tokens.unsqueeze(0).to(device))[0].detach()
-    del text_encoder, tokenizer, fixed_a2b_tokens  # free up some memory
-    gc.collect()
-    torch.cuda.empty_cache()
-
-    sec_encoder = ConditionAdaptor()
-    sec_encoder.load_state_dict(torch.load(os.path.join(args.ckpt_path, 'ConditionAdaptor.pth')))
-    sec_encoder.to(device)
-    sec_encoder.eval()
-
-    unet = initialize_unet_no_lora()
-    unet.requires_grad_(False)
-    unet.eval()
-    unet.load_state_dict(torch.load(os.path.join(args.ckpt_path, 'UNet2DConditionModel.pth')))
-    unet.to(device)
-
-    vae_a2b = initialize_vae_no_lora()
-    vae_a2b.requires_grad_(False)
-    vae_a2b.eval()
-    vae_a2b.load_state_dict(torch.load(os.path.join(args.ckpt_path, 'vae.pth')))
-    vae_a2b.to(device)
-    vae_enc = VAE_encode(vae_a2b)
-    vae_dec = VAE_decode(vae_a2b)
-    print('\n =================== All Models Loaded Successfully ===================')
+    watermark_encoder = VINE_Turbo.from_pretrained(args.pretrained_model_name)
+    watermark_encoder.to(device)
 
     ### ============= load image =============
     t_val_256 = transforms.Compose([
@@ -78,10 +45,7 @@ def main(args, device):
 
     ### ============= watermark encoding =============
     start_time = time.time()
-    encoded_image_256 = VINE_Turbo.forward_with_networks(
-        resized_img, "a2b", vae_enc, unet, vae_dec, noise_scheduler_1step, 
-        timesteps_val, fixed_a2b_emb_base, watermark, sec_encoder
-    )
+    encoded_image_256 = watermark_encoder(resized_img, watermark)
     end_time = time.time()
     print('\nEncoding time:', end_time - start_time, 's', '\n (Note that please execute multiple times to get the average time)\n')
 
@@ -105,11 +69,12 @@ if __name__ == '__main__':
     parser.add_argument('--input_path', type=str, default='./example/input/2.png', help='path to the input image')
     parser.add_argument('--output_dir', type=str, default='./example/watermarked_img', help='the directory to save the output')
     parser.add_argument('--ckpt_path', type=str, default='./ckpt/VINE-R', help='path to the checkpoint')
+    parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Enc', help='pretrained_model_name')
     parser.add_argument('--message', type=str, default='Hello World!', help='the secret message to be encoded')
     parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
     args = parser.parse_args()
     
-    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     set_seed(42)
     main(args, device)
     

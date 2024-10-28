@@ -1,7 +1,8 @@
-import torch
+import torch, os
 from torch import nn
 import torch.nn.functional as F
 from torchvision import models
+from huggingface_hub import PyTorchModelHubMixin
 
 
 def zero_module(module):
@@ -171,12 +172,19 @@ class ConditionAdaptor_orig(nn.Module):
         return residual
     
     
-class CustomConvNeXt(nn.Module):
-    def __init__(self, secret_size):
+class CustomConvNeXt(nn.Module, PyTorchModelHubMixin):
+    def __init__(self, secret_size, ckpt_path=None, device=None):
         super(CustomConvNeXt, self).__init__()
         self.convnext = models.convnext_base()
         self.convnext.classifier.append(nn.Linear(in_features=1000, out_features=secret_size, bias=True))
         self.convnext.classifier.append(nn.Sigmoid())
+    
+        if ckpt_path is not None:
+            self.load_ckpt_from_state_dict(ckpt_path, device)
+            
+    def load_ckpt_from_state_dict(self, ckpt_path, device):
+        self.convnext.load_state_dict(torch.load(os.path.join(ckpt_path, 'CustomConvNeXt.pth')))
+        self.convnext.to(device)
 
     def forward(self, x):
         x = self.convnext(x)

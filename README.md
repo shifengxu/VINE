@@ -2,7 +2,7 @@
 
 <!-- [![arXiv](https://img.shields.io/badge/arXiv-TF--ICON-green.svg?style=plastic)](https://arxiv.org/abs/2307.12493) -->
 
-[![arXiv](https://img.shields.io/badge/arXiv-VINE-green.svg?style=plastic)](https://arxiv.org/abs/2410.18775)
+[![arXiv](https://img.shields.io/badge/arXiv-VINE-green.svg?style=plastic)](https://arxiv.org/abs/2410.18775) [![HuggingFace](https://img.shields.io/badge/HuggingFace-Model-blue.svg?style=plastic)](https://huggingface.co/Shilin-LU)
 
 Official implementation of [Robust Watermarking Using Generative Priors Against Image Editing: From Benchmarking to Advances](https://arxiv.org/abs/2410.18775)
 
@@ -58,16 +58,16 @@ pip install -e .
 
 ### Downloading VINE Checkpoints
 
-Our models, VINE-B and VINE-R, have been released and are available for download [here](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/Eow35WqqamtKojEB2oX1CiUBF7I-OQBioidUcj68wol-CA?e=O8MDR4). Please place them in the `./ckpt` folder.
+Our models, VINE-B and VINE-R, have been released on HuggingFace ([VINE-B-Enc](https://huggingface.co/Shilin-LU/VINE-B-Enc), [VINE-B-Dec](https://huggingface.co/Shilin-LU/VINE-B-Enc), [VINE-R-Enc](https://huggingface.co/Shilin-LU/VINE-R-Enc), [VINE-R-Dec](https://huggingface.co/Shilin-LU/VINE-R-Dec)) and are also available for download from [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/Eow35WqqamtKojEB2oX1CiUB1URh40K1xaFp-NsGPa2VBw?e=YCrnJo). 
 
 ## Inference
 
 ### Watermark Encoding
 To encode a message into an image using VINE, please use the following commands:
 ```
-python src/watermark_encoding.py  --ckpt_path ./ckpt/VINE-R              \
-                                  --input_path ./example/input/2.png     \
-                                  --output_dir ./example/watermarked_img \
+python src/watermark_encoding.py  --pretrained_model_name Shilin-LU/VINE-R-Enc \
+                                  --input_path ./example/input/2.png           \
+                                  --output_dir ./example/watermarked_img       \
                                   --message 'Hello World!'
                                 
 ```
@@ -82,7 +82,7 @@ python src/image_editing.py  --model ultraedit                               \
 ### Watermark Decoding
 To decode a message from a watermarked image that has been edited, please use the following commands:
 ```
-python src/watermark_decoding.py  --ckpt_path ./ckpt/VINE-R                                   \
+python src/watermark_decoding.py  --pretrained_model_name Shilin-LU/VINE-R-Dec                \
                                   --input_path ./example/edited_watermarked_img/2_wm_edit.png \
                                   --groundtruth_message 'Hello World!'
                                 
