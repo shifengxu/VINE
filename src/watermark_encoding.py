@@ -28,7 +28,6 @@ def main(args, device):
     resized_img = resized_img.unsqueeze(0).to(device)
 
     ### ============= load message =============
-    
     if args.load_text: # text to bits
         if len(args.message) > 12:
             print('Error: Can only encode 100 bits (12 characters)')
