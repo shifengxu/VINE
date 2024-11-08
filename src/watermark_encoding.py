@@ -6,21 +6,36 @@ from PIL import Image
 from torchvision import transforms
 
 
+def crop_to_square(image):
+    width, height = image.size
+
+    min_side = min(width, height)
+    left = (width - min_side) // 2
+    top = (height - min_side) // 2
+    right = left + min_side
+    bottom = top + min_side
+
+    cropped_image = image.crop((left, top, right, bottom))
+    return cropped_image
+    
 def main(args, device):
     ### ============= load model =============
     watermark_encoder = VINE_Turbo.from_pretrained(args.pretrained_model_name)
     watermark_encoder.to(device)
 
-    ### ============= load image =============
+    ### ============= load image =============  
+    input_image_pil = Image.open(args.input_path).convert('RGB') # 512x512 
+    if input_image_pil.size[0] != input_image_pil.size[1]:
+        input_image_pil = crop_to_square(input_image_pil)
+    
+    size = input_image_pil.size
     t_val_256 = transforms.Compose([
         transforms.Resize(256, interpolation=transforms.InterpolationMode.BICUBIC), 
         transforms.ToTensor(),
     ])
     t_val_512 = transforms.Compose([
-        transforms.Resize(512, interpolation=transforms.InterpolationMode.BICUBIC), 
+        transforms.Resize(size, interpolation=transforms.InterpolationMode.BICUBIC), 
     ])
-    
-    input_image_pil = Image.open(args.input_path).convert('RGB') # 512x512 
     resized_img = t_val_256(input_image_pil) # 256x256
     resized_img = 2.0 * resized_img - 1.0
     input_image = transforms.ToTensor()(input_image_pil).unsqueeze(0).to(device) # 512x512
@@ -49,10 +64,10 @@ def main(args, device):
     end_time = time.time()
     print('\nEncoding time:', end_time - start_time, 's', '\n (Note that please execute multiple times to get the average time)\n')
 
-    ### ============= resolution scaling to (512x512) =============
+    ### ============= resolution scaling to original size =============
     residual_256 = encoded_image_256 - resized_img # 256x256
-    residual_512 = t_val_512(residual_256) # 512x512
-    encoded_image = residual_512 + input_image # 512x512
+    residual_512 = t_val_512(residual_256) # 512x512 or original size
+    encoded_image = residual_512 + input_image # 512x512 or original size
     encoded_image = encoded_image * 0.5 + 0.5
     encoded_image = torch.clamp(encoded_image, min=0.0, max=1.0)
 
