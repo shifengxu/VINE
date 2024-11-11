@@ -95,6 +95,9 @@ python src/quality_metrics.py   --input_path ./example/input/2.png \
                                 
 ```
 
+### Decoding Accuracy Metrics Calculation
+A simple implementation for calculating statistical decoding metrics, such as TPR@0.1% FPR, TPR@1% FPR, and AUROC, is available in [this issue](https://github.com/Shilin-LU/VINE/issues/4). The full codebase will be released alongside our benchmark.
+
 ### Demo
 We provide a complete demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation in `./src/demo.ipynb`. Please refer to it for detailed instructions.
 
