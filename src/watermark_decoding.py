@@ -51,7 +51,6 @@ def main(args, device):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_path', type=str, default='./example/edited_watermarked_img/2_wm_edit.png', help='path to the (edited) watermarked image')
-    parser.add_argument('--ckpt_path', type=str, default="/home/shilin/nips24_zilan/formal_finetune_ultraedit_enc/best-psnr-checkpoint_4", help='path to the checkpoint')
     parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Dec', help='pretrained_model_name')
     parser.add_argument('--groundtruth_message', type=str, default='Hello World!', help='the secret message to be encoded')
     parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
