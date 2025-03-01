@@ -73,7 +73,7 @@ We provide a complete demo that includes the processes of watermark encoding, im
 
 ### Watermark Encoding
 To encode a message into an image using VINE, please use the following commands:
-```python
+```shell
 python src/watermark_encoding.py  --pretrained_model_name Shilin-LU/VINE-R-Enc \
                                   --input_path ./example/input/2.png           \
                                   --output_dir ./example/watermarked_img       \
@@ -82,7 +82,7 @@ python src/watermark_encoding.py  --pretrained_model_name Shilin-LU/VINE-R-Enc \
 ```
 ### Image Editing
 We now offer [UltraEdit](https://github.com/HaozheZhao/UltraEdit) and Image Inversion for image editing, with more options to be added soon. To edit an image, please use the following commands:
-```python
+```shell
 python src/image_editing.py  --model ultraedit                               \
                              --input_path ./example/watermarked_img/2_wm.png \
                              --output_dir ./example/edited_watermarked_img
@@ -90,7 +90,7 @@ python src/image_editing.py  --model ultraedit                               \
 ```
 ### Watermark Decoding
 To decode a message from a watermarked image that has been edited, please use the following commands:
-```python
+```shell
 python src/watermark_decoding.py  --pretrained_model_name Shilin-LU/VINE-R-Dec                \
                                   --input_path ./example/edited_watermarked_img/2_wm_edit.png \
                                   --groundtruth_message 'Hello World!'
@@ -98,7 +98,7 @@ python src/watermark_decoding.py  --pretrained_model_name Shilin-LU/VINE-R-Dec  
 ```
 ### Quality Metrics Calculation
 To calculate the quality metrics for single image (PSNR, SSIM, and LPIPS), please use the following commands:
-```python
+```shell
 python src/quality_metrics.py   --input_path ./example/input/2.png \
                                 --wmed_input_path ./example/watermarked_img/2_wm.png
                                 
