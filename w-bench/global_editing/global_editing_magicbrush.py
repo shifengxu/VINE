@@ -10,7 +10,9 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import sys
-sys.path.append("./w-bench/instruct-pix2pix/stable_diffusion")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(BASE_DIR, "./instruct-pix2pix/"))
+sys.path.append(os.path.join(BASE_DIR, "./instruct-pix2pix/stable_diffusion/"))
 from tqdm import tqdm
 from argparse import ArgumentParser
 from einops import rearrange
@@ -64,8 +66,8 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("--resolution", default=512, type=int)
     parser.add_argument("--steps", default=50, type=int)
-    parser.add_argument("--config", default="/ntuzfs/shilin/Zihan/MagicBrush/instruct-pix2pix/configs/generate.yaml", type=str)
-    parser.add_argument("--ckpt", default='/ntuzfs/shilin/Zihan/MagicBrush/instruct-pix2pix/checkpoints/MagicBrush-epoch-52-step-4999.ckpt', type=str)
+    parser.add_argument("--config", default="./w-bench/global_editing/instruct-pix2pix/configs/generate.yaml", type=str)
+    parser.add_argument("--ckpt", default='./w-bench/global_editing/instruct-pix2pix/checkpoints/MagicBrush-epoch-52-step-4999.ckpt', type=str)
     parser.add_argument("--vae-ckpt", default=None, type=str)
     parser.add_argument("--input", type=str)            # todo: input_path_image: path4img
     parser.add_argument("--output", type=str)           # todo: output_path_image: path4img
@@ -84,12 +86,11 @@ def main():
     seed = random.randint(0, 100000) if args.seed is None else args.seed
 
     """ DASHBOARD START """
-    # todo - screen -d -r ?
     # todo - conda activate ip2p
-    # todo - python /ntuzfs/shilin/Zihan/MagicBrush/instruct-pix2pix/edit_cli.py
+    # todo - python .py
 
-    WMs = ["22_VINE"]
-    cfg_text_range = [8]#[5, 6, 7, 8, 9]
+    WMs = ["vine"]
+    cfg_text_range = [5, 6, 7, 8, 9]
 
     for WM in WMs:            # todo ***
         MODE = "INSTRUCT"
@@ -98,17 +99,14 @@ def main():
         for i in cfg_text_range:
             args.cfg_text = i
             args.cfg_image = 1.5
-            INPUT_PATH_IMAGE = f"/ntuzfs/shilin/Zihan/baseline_images/watermarks/{WM}/512/{MODE}"
-            #INPUT_PATH_IMAGE = "/ntuzfs/shilin/Zihan/baseline_images/originals/INSTRUCT/image"
-            INPUT_PATH_PROMPT = f"/ntuzfs/shilin/Zihan/baseline_images/originals/{MODE}/prompts.csv"
-            OUTPUT_PATH = f"/ntuzfs/shilin/Zihan/baseline_images/edited/{WM}/{MODE}{SPEC}/{cfg_text_range[cfg_text_range.index(args.cfg_text)]}"
+            INPUT_PATH_IMAGE = f"/home/shilin1/projs/datasets/{WM}_encoded/512/INSTRUCT_1K" 
+            INPUT_PATH_PROMPT = f"/home/shilin1/projs/datasets/W-Bench/INSTRUCT_1K/prompts.csv"
+            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/{MODE}{SPEC}/{cfg_text_range[cfg_text_range.index(args.cfg_text)]}"
             os.makedirs(OUTPUT_PATH, exist_ok=True)
             print(f"\n>> Processing edited images for {WM}[{MODE}{SPEC}], with GUIDANCE of [{args.cfg_text}][{args.cfg_image}]...")
 
             IDs = pd.read_csv(INPUT_PATH_PROMPT).iloc[:, 1].tolist()
             for idx, prompt in tqdm(enumerate(pd.read_csv(INPUT_PATH_PROMPT).iloc[:, 2].tolist())):
-                # if guidance == 13 and idx != 925:
-                #   continue
                 args.edit = prompt
                 args.input = os.path.join(INPUT_PATH_IMAGE, f"{str(idx)}_{str(IDs[idx])}_wm.png")
                 args.output = os.path.join(OUTPUT_PATH, f"{str(idx)}_{str(IDs[idx])}.png")

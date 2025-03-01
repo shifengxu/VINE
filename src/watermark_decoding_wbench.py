@@ -14,7 +14,7 @@ parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE
 parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
 parser.add_argument('--groundtruth_message', type=str, default='Hello World!', help='the secret message to be encoded')
 parser.add_argument('--unwm_images_dir', type=str, default='/home/shilin1/projs/datasets/W-Bench')
-parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/encoded_image')
+parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/edited_image/')
 parser.add_argument('--unwm_acc_dict', type=str, default='/home/shilin1/projs/VINE/output_csv/vine/unwm_acc_dict.json', help='save the detection results of original images to reduce computational load')
 args = parser.parse_args()
 
@@ -51,7 +51,8 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
             acc = []
             
             skip_keywords = [
-                # 'SVD_1K', 'mask', 'DISTORTION_1K', 'INSTRUCT_1K',
+                'mask', 'SVD_1K', 
+                # 'DISTORTION_1K', 'INSTRUCT_1K',
                 # 'DET_INVERSION_1K', 'LOCAL_EDITING_5K', 'STO_REGENERATION_1K'
             ]
             if any(keyword in root for keyword in skip_keywords):
@@ -143,7 +144,6 @@ def main():
     # basename = os.path.basename(os.path.dirname(args.ckpt))
     basename = 'vine'
     target_base = './output_csv/'
-    wm_images_base = '/home/shilin1/projs/datasets/encoded_image'
     
     # args.wm_images_dir = os.path.join(wm_images_base, basename)
     os.makedirs(os.path.join(target_base, basename), exist_ok=True)

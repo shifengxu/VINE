@@ -33,13 +33,17 @@ Current image watermarking methods are vulnerable to advanced image editing tech
   - [Setup](#setup)
     - [Creating a Conda Environment](#creating-a-conda-environment)
     - [Downloading VINE Checkpoints](#downloading-vine-checkpoints)
+  - [Demo](#demo)
   - [Inference](#inference)
     - [Watermark Encoding](#watermark-encoding)
     - [Image Editing](#image-editing)
     - [Watermark Decoding](#watermark-decoding)
     - [Quality Metrics Calculation](#quality-metrics-calculation)
-    - [Demo](#demo)
   - [W-Bench](#w\-bench)
+    - [Regeneration](#regeneration)
+    - [Global Editing](#global-editing)
+    - [Local Editing](#local-editing)
+    - [Image to Video](#image-to-video)
   - [Citation](#citation)
 
 
@@ -52,7 +56,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 ```
 git clone https://github.com/Shilin-LU/VINE.git
 cd VINE
-conda env create -f environments/environment_vine.yaml
+conda env create -f environment.yaml
 conda activate vine
 cd diffusers
 pip install -e .
@@ -61,6 +65,9 @@ pip install -e .
 ### Downloading VINE Checkpoints
 
 Our models, VINE-B and VINE-R, have been released on HuggingFace ([VINE-B-Enc](https://huggingface.co/Shilin-LU/VINE-B-Enc), [VINE-B-Dec](https://huggingface.co/Shilin-LU/VINE-B-Dec), [VINE-R-Enc](https://huggingface.co/Shilin-LU/VINE-R-Enc), [VINE-R-Dec](https://huggingface.co/Shilin-LU/VINE-R-Dec)) and are also available for download from [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/Eow35WqqamtKojEB2oX1CiUB1URh40K1xaFp-NsGPa2VBw?e=YCrnJo). 
+
+## Demo
+We provide a complete demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation in `./src/demo.ipynb`. Please refer to it for detailed instructions.
 
 ## Inference
 
@@ -100,11 +107,33 @@ python src/quality_metrics.py   --input_path ./example/input/2.png \
 ### Decoding Accuracy Metrics Calculation
 A simple implementation for calculating statistical decoding metrics, such as TPR@0.1% FPR, TPR@1% FPR, and AUROC, is available in [this issue](https://github.com/Shilin-LU/VINE/issues/4#issuecomment-2467342137). The full codebase will be released alongside our benchmark.
 
-### Demo
-We provide a complete demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation in `./src/demo.ipynb`. Please refer to it for detailed instructions.
 
 ## W-Bench
 Our benchmark is coming soon!
+
+### Regeneration
+
+### Global Editing
+
+#### MagicBrush
+```
+# Creating the Environment for MagicBrush
+cd w-bench/global_editing
+git clone https://github.com/timothybrooks/instruct-pix2pix.git
+cd instruct-pix2pix
+conda env create -f environment.yaml
+conda activate ip2p
+
+# Download the MagicBrush Checkpoint
+mkdir checkpoints
+cd checkpoints
+wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/MagicBrush-epoch-52-step-4999.ckpt
+```
+
+### Local Editing
+
+### Image to Video
+
 
 ## Citation
 If you find the repo useful, please consider citing:

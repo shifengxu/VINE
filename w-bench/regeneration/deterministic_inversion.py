@@ -16,7 +16,7 @@ if __name__ == "__main__":
         for STEPS in [15, 25, 35, 45]:
             DEVICE = 'cuda:0'   # todo *** (CUDA)
             INPUT_PATH = f"/home/shilin1/projs/datasets/{WM}_encoded/512/DET_INVERSION_1K"        
-            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/INVERSION/{STEPS}"     # todo *** (OUTPUT)
+            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/DET_INVERSION_1K/{STEPS}"     # todo *** (OUTPUT)
             os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD End ------------------------------------------------------------
 

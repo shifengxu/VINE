@@ -9,7 +9,7 @@ for WM in WMs:
     for STEPS in [220, 240]:# [60, 80, 100, 120, 140]:, 220, 240
         DEVICE = 'cuda:0'   # todo *** (CUDA)
         INPUT_PATH = f"/home/shilin1/projs/datasets/{WM}_encoded/512/STO_REGENERATION_1K"   # todo *** (INPUT)
-        OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/REGENERATION/{STEPS}"   # todo *** (OUTPUT)
+        OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/STO_REGENERATION_1K/{STEPS}"   # todo *** (OUTPUT)
         os.makedirs(OUTPUT_PATH, exist_ok=True)
         
 # TODO ---------------------------------------- DASHBOARD ENDS ------------------------------------------------------------
