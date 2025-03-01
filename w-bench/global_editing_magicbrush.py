@@ -10,7 +10,7 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import sys
-# sys.path.append("/ntuzfs/shilin/Zihan/MagicBrush/instruct-pix2pix/stable_diffusion")
+sys.path.append("./w-bench/instruct-pix2pix/stable_diffusion")
 from tqdm import tqdm
 from argparse import ArgumentParser
 from einops import rearrange
