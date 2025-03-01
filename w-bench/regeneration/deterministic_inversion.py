@@ -1,11 +1,9 @@
-from utils import container_inversion, load_image
+from utils_det_inversion import container_inversion, load_image
 from argparse import ArgumentParser
-from diffusers import StableDiffusionPipeline, DDIMInverseScheduler, AutoencoderKL, DDIMScheduler, DPMSolverMultistepScheduler, DPMSolverMultistepInverseScheduler
+from diffusers import StableDiffusionPipeline
 import torch
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '5'
 from PIL import Image
-from torchvision import transforms
 from tqdm import tqdm
 import numpy as np
 repo = 'stabilityai/stable-diffusion-2-1-base'
@@ -13,12 +11,12 @@ repo = 'stabilityai/stable-diffusion-2-1-base'
 
 if __name__ == "__main__":
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
-    WMs = ["21_VINE_B_new", "22_VINE_R_new"]  # todo *** (WMs)
+    WMs = ["vine"]  # todo *** (WMs)
     for WM in WMs:
         for STEPS in [15, 25, 35, 45]:
-            DEVICE = 'cuda:2'   # todo *** (CUDA)
-            INPUT_PATH = f"/ntuzfs/shilin/Zihan/baseline_images/watermarks/{WM}/512/INVERSION"
-            OUTPUT_PATH = f"/ntuzfs/shilin/Zihan/baseline_images/edited/{WM}/INVERSION/{STEPS}"     # todo *** (OUTPUT)
+            DEVICE = 'cuda:0'   # todo *** (CUDA)
+            INPUT_PATH = f"/home/shilin1/projs/datasets/{WM}_encoded/512/DET_INVERSION_1K"        
+            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/INVERSION/{STEPS}"     # todo *** (OUTPUT)
             os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD End ------------------------------------------------------------
 
@@ -45,10 +43,7 @@ if __name__ == "__main__":
             ldm_pipe.to(device)
 
             files = [file for file in os.listdir(folder_path) if file.endswith(".png")]
-            #files = [(int(file.split(".")[0]), file) for file in files]
-            #files = sorted(files, key=lambda x: x[0])
-            #files = [file[1] for file in files]
-
+            
             with torch.no_grad():
                 for file in tqdm(files):
                     img_tensor = load_image(os.path.join(folder_path, file))

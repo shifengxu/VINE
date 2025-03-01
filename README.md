@@ -52,7 +52,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 ```
 git clone https://github.com/Shilin-LU/VINE.git
 cd VINE
-conda env create -f environment.yaml
+conda env create -f environments/environment_vine.yaml
 conda activate vine
 cd diffusers
 pip install -e .
