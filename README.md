@@ -116,7 +116,7 @@ Our benchmark is coming soon!
 ### Global Editing
 
 #### MagicBrush
-```
+```shell
 # Creating the Environment for MagicBrush
 cd w-bench/global_editing
 git clone https://github.com/timothybrooks/instruct-pix2pix.git
