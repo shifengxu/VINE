@@ -32,7 +32,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 </div>
 
 ## News
-- [Mar 2, 2025] 😊 We are releasing W-Bench! It will be completed within the next two weeks. Stay tuned!
+- [Mar 02, 2025] 😊 We are releasing W-Bench! It will be completed within the next two weeks. Stay tuned!
 
 - [Jan 23, 2025] 🥳 Vine is accepted by ICLR 2025 ([OpenReview](https://openreview.net/forum?id=16O8GCm8Wn))!
 
@@ -130,11 +130,22 @@ A simple implementation for calculating statistical decoding metrics, such as TP
 ## W-Bench
 W-Bench is the first benchmark to evaluate watermarking robustness across four types of image editing techniques, including [regeneration](#regeneration), [global editing](#global-editing), [local editing](#local-editing), and [image-to-video generation](#image-to-video). 11 representative watermarking methods are evaluated on the W-Bench. The W-Bench contains 10,000 samples sourced from datasets such as COCO, Flickr, ShareGPT4V, etc.
 
+The images of W-Bench have been released on [HuggingFace](https://huggingface.co/datasets/Shilin-LU/W-Bench) and are also available on [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/EkJ9AIBUNglEt3sRKIBNA9oBI1BNoz2IEj9iizh4uKF-3Q?e=stTbpM). Below is a detailed guide on how to use all the image editing techniques listed in W-Bench.
+
+
 ### Regeneration
+
+#### 1. Stochastic Regeneration
+
+#### 2. Deterministic Regeneration (aka, Image Inversion)
 
 ### Global Editing
 
-#### MagicBrush
+#### 1. UltraEdit
+
+#### 2. InstructPix2Pix
+
+#### 3. MagicBrush
 ```shell
 # Creating the Environment for MagicBrush
 cd w-bench/global_editing
@@ -150,6 +161,10 @@ wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/Magic
 ```
 
 ### Local Editing
+
+#### 1. UltraEdit
+
+#### 2. ControlNet-Inpainting
 
 ### Image to Video
 ```shell

@@ -1,3 +1,4 @@
 diffusers/
 __pycache__/
 checkpoints
+output_csv/
