@@ -2,3 +2,4 @@ diffusers/
 __pycache__/
 checkpoints
 output_csv/
+instruct-pix2pix/
