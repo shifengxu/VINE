@@ -75,6 +75,8 @@ cd diffusers
 pip install -e .
 ```
 
+Note that when editing images using MagicBrush and SVD, the environment should use the specific environments listed in their respective sections below. In all other cases, the **vine** environment is sufficient to run all code, including watermark encoding, decoding, regeneration, local editing, and other global editing tasks.
+
 ### Downloading VINE Checkpoints
 
 Our models, VINE-B and VINE-R, have been released on HuggingFace ([VINE-B-Enc](https://huggingface.co/Shilin-LU/VINE-B-Enc), [VINE-B-Dec](https://huggingface.co/Shilin-LU/VINE-B-Dec), [VINE-R-Enc](https://huggingface.co/Shilin-LU/VINE-R-Enc), [VINE-R-Dec](https://huggingface.co/Shilin-LU/VINE-R-Dec)) and are also available for download from [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/Eow35WqqamtKojEB2oX1CiUB1URh40K1xaFp-NsGPa2VBw?e=YCrnJo). 
@@ -95,30 +97,29 @@ python src/watermark_encoding.py  --pretrained_model_name Shilin-LU/VINE-R-Enc \
                                   --input_path ./example/input/2.png           \
                                   --output_dir ./example/watermarked_img       \
                                   --message 'Hello World!'
-                                
 ```
+
 ### Image Editing
 We now offer [UltraEdit](https://github.com/HaozheZhao/UltraEdit) and Image Inversion for image editing, with more options to be added soon. To edit an image, please use the following commands:
 ```shell
 python src/image_editing.py  --model ultraedit                               \
                              --input_path ./example/watermarked_img/2_wm.png \
-                             --output_dir ./example/edited_watermarked_img
-                                
+                             --output_dir ./example/edited_watermarked_img      
 ```
+
 ### Watermark Decoding
 To decode a message from a watermarked image that has been edited, please use the following commands:
 ```shell
 python src/watermark_decoding.py  --pretrained_model_name Shilin-LU/VINE-R-Dec                \
                                   --input_path ./example/edited_watermarked_img/2_wm_edit.png \
-                                  --groundtruth_message 'Hello World!'
-                                
+                                  --groundtruth_message 'Hello World!'                    
 ```
+
 ### Quality Metrics Calculation
 To calculate the quality metrics for single image (PSNR, SSIM, and LPIPS), please use the following commands:
 ```shell
 python src/quality_metrics.py   --input_path ./example/input/2.png \
-                                --wmed_input_path ./example/watermarked_img/2_wm.png
-                                
+                                --wmed_input_path ./example/watermarked_img/2_wm.png                   
 ```
 
 ### Decoding Accuracy Metrics Calculation
@@ -127,7 +128,7 @@ A simple implementation for calculating statistical decoding metrics, such as TP
 <br>
 
 ## W-Bench
-Our benchmark is coming soon!
+W-Bench is the first benchmark to evaluate watermarking robustness across four types of image editing techniques, including [regeneration](#regeneration), [global editing](#global-editing), [local editing](#local-editing), and [image-to-video generation](#image-to-video). 11 representative watermarking methods are evaluated on the W-Bench. The W-Bench contains 10,000 samples sourced from datasets such as COCO, Flickr, ShareGPT4V, etc.
 
 ### Regeneration
 
