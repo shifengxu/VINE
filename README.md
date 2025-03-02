@@ -151,7 +151,20 @@ wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/Magic
 ### Local Editing
 
 ### Image to Video
+```shell
+# Creating the Environment for SVD
+conda create -n svd python=3.8.5
+conda activate svd
+cd w-bench/image_to_video/generative-models
+pip3 install -r requirements/pt2.txt
 
+# Download the SVD Checkpoint
+mkdir checkpoints # path: ./w-bench/image_to_video/generative-models/checkpoints
+cd checkpoints
+huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
+
+# Alternatively, you may use the script to download: ./w-bench/image_to_video/generative-models/download_svd_ckpt.py
+```
 <br>
 
 ## Citation

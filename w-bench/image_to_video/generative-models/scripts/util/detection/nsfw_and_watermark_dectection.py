@@ -47,10 +47,10 @@ class DeepFloydDataFiltering(object):
         self.clip_model.eval()
 
         self.cpu_w_weights, self.cpu_w_biases = load_model_weights(
-            os.path.join(RESOURCES_ROOT, "/ntuzfs/shilin/Zihan/SVD/generative-models/scripts/util/detection/w_head_v1.npz")
+            "./w-bench/image_to_video/generative-models/scripts/util/detection/w_head_v1.npz"
         )
         self.cpu_p_weights, self.cpu_p_biases = load_model_weights(
-            os.path.join(RESOURCES_ROOT, "/ntuzfs/shilin/Zihan/SVD/generative-models/scripts/util/detection/p_head_v1.npz")
+            "./w-bench/image_to_video/generative-models/scripts/util/detection/p_head_v1.npz"
         )
         self.w_threshold, self.p_threshold = 0.5, 0.5
 

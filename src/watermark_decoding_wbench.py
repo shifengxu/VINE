@@ -51,7 +51,8 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
             acc = []
             
             skip_keywords = [
-                'mask', 'SVD_1K', 
+                'mask', 
+                # 'SVD_1K', 
                 # 'DISTORTION_1K', 'INSTRUCT_1K',
                 # 'DET_INVERSION_1K', 'LOCAL_EDITING_5K', 'STO_REGENERATION_1K'
             ]

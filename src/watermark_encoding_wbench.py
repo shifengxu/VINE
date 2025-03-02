@@ -10,7 +10,7 @@ from tqdm import tqdm
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_dir', type=str, default="/home/shilin1/projs/datasets/W-Bench-complete", help='path to the input image')
-    parser.add_argument('--output_dir', type=str, default='/home/shilin1/projs/datasets/encoded_image', help='the directory to save the output')
+    parser.add_argument('--output_dir', type=str, default='/home/shilin1/projs/datasets/vine_encoded', help='the directory to save the output')
     parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Enc', help='pretrained_model_name')
     parser.add_argument('--message', type=str, default='Hello World!', help='the secret message to be encoded')
     parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     resolution = '512'
     total_time = 0
     with torch.no_grad():
-        category = ['INSTRUCT_1K', 'DET_INVERSION_1K', 'STO_REGENERATION_1K', 'LOCAL_EDITING_5K', 'SVD_1K', 'DISTORTION_1K']
+        category = ['SVD_1K']
         for c in category:
             if c == 'LOCAL_EDITING_5K':
                 sub_category = ['10-20', '20-30', '30-40', '40-50', '50-60']
