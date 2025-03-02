@@ -36,6 +36,9 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 
 - [Oct 24, 2024] 🚀 We release the checkpoints of Vine along with our technical report on [arXiv](https://arxiv.org/abs/2410.18775)!
 
+---
+
+<br>
 </div>
 
 ## Contents
@@ -55,6 +58,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
     - [Image to Video](#image-to-video)
   - [Citation](#citation)
 
+---
 
 <br>
 
@@ -75,8 +79,12 @@ pip install -e .
 
 Our models, VINE-B and VINE-R, have been released on HuggingFace ([VINE-B-Enc](https://huggingface.co/Shilin-LU/VINE-B-Enc), [VINE-B-Dec](https://huggingface.co/Shilin-LU/VINE-B-Dec), [VINE-R-Enc](https://huggingface.co/Shilin-LU/VINE-R-Enc), [VINE-R-Dec](https://huggingface.co/Shilin-LU/VINE-R-Dec)) and are also available for download from [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/Eow35WqqamtKojEB2oX1CiUB1URh40K1xaFp-NsGPa2VBw?e=YCrnJo). 
 
+---
+
 ## Demo
 We provide a complete demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation in `./src/demo.ipynb`. Please refer to it for detailed instructions.
+
+---
 
 ## Inference
 
@@ -116,6 +124,7 @@ python src/quality_metrics.py   --input_path ./example/input/2.png \
 ### Decoding Accuracy Metrics Calculation
 A simple implementation for calculating statistical decoding metrics, such as TPR@0.1% FPR, TPR@1% FPR, and AUROC, is available in [this issue](https://github.com/Shilin-LU/VINE/issues/4#issuecomment-2467342137). The full codebase will be released alongside our benchmark.
 
+---
 
 ## W-Bench
 Our benchmark is coming soon!
@@ -143,6 +152,7 @@ wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/Magic
 
 ### Image to Video
 
+---
 
 ## Citation
 If you find the repo useful, please consider citing:
