@@ -30,9 +30,9 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 </div>
 
 ## News
-- [Mar 2, 2024] 😊 We are releasing W-Bench! It will be completed within the next two weeks. Stay tuned!
+- [Mar 2, 2025] 😊 We are releasing W-Bench! It will be completed within the next two weeks. Stay tuned!
 
-- [Jan 23, 2024] 🥳 Vine is accepted by ICLR 2025 ([OpenReview](https://openreview.net/forum?id=16O8GCm8Wn))!
+- [Jan 23, 2025] 🥳 Vine is accepted by ICLR 2025 ([OpenReview](https://openreview.net/forum?id=16O8GCm8Wn))!
 
 - [Oct 24, 2024] 🚀 We release the checkpoints of Vine along with our technical report on [arXiv](https://arxiv.org/abs/2410.18775)!
 
