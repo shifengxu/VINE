@@ -5,8 +5,8 @@ from tqdm import tqdm
 
 
 def cluster_svd_images():
-    source_folder = f''
-    target_folder = f''
+    source_folder = f'/home/shilin1/projs/datasets/edited_image/vine/SVD'
+    target_folder = f'/home/shilin1/projs/datasets/edited_image/vine/SVD_1K'
 
     small_folders = ["5", "7", "9", "11", "13", "15", "17", "19"]
     for folder in small_folders:

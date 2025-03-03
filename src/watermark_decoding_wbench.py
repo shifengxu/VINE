@@ -13,9 +13,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Dec', help='pretrained_model_name')
 parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
 parser.add_argument('--groundtruth_message', type=str, default='Hello World!', help='the secret message to be encoded')
-parser.add_argument('--unwm_images_dir', type=str, default='/home/shilin1/projs/datasets/W-Bench')
-parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/edited_image/')
+parser.add_argument('--unwm_images_dir', type=str, default='/home/shilin1/projs/datasets/W-Bench', help='the path to unwatermarked images for calculating TPR, FPR, and AUROC metrics')
+parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/12_VINE_R', help='the path to watermarked images for decoding')
 parser.add_argument('--unwm_acc_dict', type=str, default='/home/shilin1/projs/VINE/output_csv/vine/unwm_acc_dict.json', help='save the detection results of original images to reduce computational load')
+parser.add_argument('--output_dir', type=str, default='./output_csv/vine', help='the path to save detection results of watermarked images')
 args = parser.parse_args()
 
 
@@ -42,7 +43,7 @@ def process_image(image_path, decoder, GTsecret, device):
     return acc
                     
 
-def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=None, wm_flag=True):
+def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=None, wm_flag=True, edited=True):
     acc_total = {}
     # Traverse all files and subfolders in the folder
     for root, dirs, files in os.walk(folder_path):
@@ -52,8 +53,7 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
             
             skip_keywords = [
                 'mask', 
-                # 'SVD_1K', 
-                # 'DISTORTION_1K', 'INSTRUCT_1K',
+                # 'SVD_1K', # 'DISTORTION_1K', 'INSTRUCT_1K',
                 # 'DET_INVERSION_1K', 'LOCAL_EDITING_5K', 'STO_REGENERATION_1K'
             ]
             if any(keyword in root for keyword in skip_keywords):
@@ -67,8 +67,19 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
             # wm images
             if wm_flag == True:
                 parent_folder, last_folder = os.path.split(root)
-                category = os.path.basename(parent_folder)
-                category_scale = os.path.join(category, last_folder)
+                
+                # edited images
+                if edited == True:  
+                    category = os.path.basename(parent_folder)
+                    category_scale = os.path.join(category, last_folder)
+                    
+                # unedited images
+                else:               
+                    if 'LOCAL_EDITING_5K' in root:
+                        category = os.path.basename(parent_folder)
+                    else:
+                        category = os.path.basename(root)
+                    category_scale = category
                 
                 all_acc = np.concatenate([unwm_acc[category], acc], axis=None)
                 zeros_array = np.zeros(len(unwm_acc[category]), dtype=int)
@@ -82,7 +93,7 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                     'TPR@0.1%FPR': [round(low1000_1, 4)], 
                     'AUROC': [round(auc_1, 4)]
                 }
-            
+                    
             # unwm images
             if wm_flag == False:
                 if 'LOCAL_EDITING_5K' in root:
@@ -95,6 +106,8 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                     
                 print(category)
                 
+                acc_total[category] = acc
+                
                 if category == 'INSTRUCT_1K':
                     acc_total['INSTRUCT_UltraEdit'] = acc
                     acc_total['INSTRUCT_Pix2Pix'] = acc
@@ -103,7 +116,7 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                     acc_total['REGION_cnInpaint'] = acc
                     acc_total['REGION_UltraEdit'] = acc
                 else:
-                    acc_total[category] = acc
+                    pass
 
     return acc_total
 
@@ -141,15 +154,10 @@ def main():
         watermark = torch.tensor(data, dtype=torch.float).unsqueeze(0)
         watermark = watermark.to(device)
     
-        
-    # basename = os.path.basename(os.path.dirname(args.ckpt))
-    basename = 'vine'
-    target_base = './output_csv/'
     
-    # args.wm_images_dir = os.path.join(wm_images_base, basename)
-    os.makedirs(os.path.join(target_base, basename), exist_ok=True)
-    target_unwm = os.path.join(target_base, basename, 'unwm_acc_dict.json')
-    target_wm = os.path.join(target_base, basename, 'wm_acc_dict.json')
+    os.makedirs(args.output_dir, exist_ok=True)
+    target_unwm = os.path.join(args.output_dir, 'unwm_acc_dict.json')
+    target_wm = os.path.join(args.output_dir, 'wm_acc_dict.json')
     
     with torch.no_grad():
         if args.unwm_acc_dict is None:
@@ -162,7 +170,7 @@ def main():
         
         print('original images are finishied')
         
-        wm_acc = process_images_in_folder(args.wm_images_dir, decoder, watermark, device, unwm_acc, wm_flag=True)
+        wm_acc = process_images_in_folder(args.wm_images_dir, decoder, watermark, device, unwm_acc, wm_flag=True, edited=True) # for unedited images, using edited = False
         with open(target_wm, 'w') as json_file:
             json.dump(wm_acc, json_file)
 
