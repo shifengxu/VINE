@@ -152,7 +152,7 @@ class DiffWMAttacker(WMAttacker):
             for (img_path, out_path), prompt in tqdm(zip(zip(image_paths, out_paths), prompts)):
                 img = Image.open(img_path)
                 img = np.asarray(img) / 255
-                img = (img - 0.5) * 2     ## 从0-1转化为-1到1
+                img = (img - 0.5) * 2 
                 img = torch.tensor(img, dtype=torch.float16, device=self.device).permute(2, 0, 1).unsqueeze(0)
                 latents = self.pipe.vae.encode(img).latent_dist
                 latents = latents.sample(generator) * self.pipe.vae.config.scaling_factor    # latents: torch.Size([1, 4, 64, 64])
@@ -178,7 +178,6 @@ class DiffWMAttacker(WMAttacker):
 
 
 
-import inspect
 from typing import Callable, List, Optional, Union
 import torch
 from diffusers import StableDiffusionPipeline
