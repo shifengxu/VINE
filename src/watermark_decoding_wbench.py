@@ -1,5 +1,4 @@
 import os, torch, argparse, json
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 from stega_encoder_decoder import CustomConvNeXt
 from accelerate.utils import set_seed
 from PIL import Image
@@ -12,11 +11,13 @@ from sklearn import metrics
 parser = argparse.ArgumentParser()
 parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Dec', help='pretrained_model_name')
 parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
-parser.add_argument('--groundtruth_message', type=str, default='Hello World!', help='the secret message to be encoded')
+parser.add_argument('--groundtruth_message', type=str, default='Hello', help='the secret message to be encoded')
 parser.add_argument('--unwm_images_dir', type=str, default='/home/shilin1/projs/datasets/W-Bench', help='the path to unwatermarked images for calculating TPR, FPR, and AUROC metrics')
-parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/12_VINE_R', help='the path to watermarked images for decoding')
-parser.add_argument('--unwm_acc_dict', type=str, default='/home/shilin1/projs/VINE/output_csv/vine/unwm_acc_dict.json', help='save the detection results of original images to reduce computational load')
-parser.add_argument('--output_dir', type=str, default='./output_csv/vine', help='the path to save detection results of watermarked images')
+parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/distortion/22_VINE/512', help='the path to watermarked images for decoding')
+parser.add_argument('--unwm_acc_dict', type=str, default=None, help='save the detection results of original images to reduce computational load')
+parser.add_argument('--output_dir', type=str, default='./output_csv/vine_r_new_dis', help='the path to save detection results of watermarked images')
+parser.add_argument('--decode_wbench_raw_data', type=bool, default=True, help='decode the raw data of W-Bench')
+parser.add_argument("--transformation", type=str, choices=["edit", "distort", "orig"], default="distort", help='specify the transformation that the watermarked images to be decoded undergo')
 args = parser.parse_args()
 
 
@@ -39,11 +40,11 @@ def process_image(image_path, decoder, GTsecret, device):
 
     same_elements_count = sum(x == y for x, y in zip(groundtruth_watermark_list, pred_watermark_list))
     acc = same_elements_count / 100
-    print('Decoding Bit Accuracy:', acc)
+    # print('Decoding Bit Accuracy:', acc)
     return acc
                     
 
-def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=None, wm_flag=True, edited=True):
+def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=None, wm_flag=True, transformation='edit'):
     acc_total = {}
     # Traverse all files and subfolders in the folder
     for root, dirs, files in os.walk(folder_path):
@@ -69,17 +70,23 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                 parent_folder, last_folder = os.path.split(root)
                 
                 # edited images
-                if edited == True:  
+                if transformation == 'edit':  
                     category = os.path.basename(parent_folder)
                     category_scale = os.path.join(category, last_folder)
-                    
-                # unedited images
-                else:               
+                # distorted images
+                elif transformation == 'distort':
+                    sub_parent_folder, distorted_category = os.path.split(parent_folder)
+                    category_scale = os.path.join(distorted_category, last_folder)
+                    category = os.path.basename(sub_parent_folder)
+                # original images
+                elif transformation == 'orig':               
                     if 'LOCAL_EDITING_5K' in root:
                         category = os.path.basename(parent_folder)
                     else:
                         category = os.path.basename(root)
                     category_scale = category
+                else:
+                    raise NotImplementedError("This function is not implemented. Please set the transformation to ['edit', 'distort', 'orig'].")
                 
                 all_acc = np.concatenate([unwm_acc[category], acc], axis=None)
                 zeros_array = np.zeros(len(unwm_acc[category]), dtype=int)
@@ -95,7 +102,7 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                 }
                     
             # unwm images
-            if wm_flag == False:
+            else:
                 if 'LOCAL_EDITING_5K' in root:
                     parent_folder, last_folder = os.path.split(root)
                     parent_folder_1, last_folder_1 = os.path.split(parent_folder)
@@ -147,13 +154,15 @@ def main():
         packet_binary = ''.join(format(x, '08b') for x in data)
         watermark = [int(x) for x in packet_binary]
         watermark.extend([0, 0, 0, 0])
-        watermark = torch.tensor(watermark, dtype=torch.float).unsqueeze(0)
-        watermark = watermark.to(device)
     else: # random bits
         data = torch.randint(0, 2, (100,))
-        watermark = torch.tensor(data, dtype=torch.float).unsqueeze(0)
-        watermark = watermark.to(device)
+
+    if args.decode_wbench_raw_data:
+        # the groundtruth message used for all baselines in w-bench
+        watermark = [0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
+    watermark = torch.tensor(watermark, dtype=torch.float).unsqueeze(0)
+    watermark = watermark.to(device)
     
     os.makedirs(args.output_dir, exist_ok=True)
     target_unwm = os.path.join(args.output_dir, 'unwm_acc_dict.json')
@@ -161,7 +170,9 @@ def main():
     
     with torch.no_grad():
         if args.unwm_acc_dict is None:
-            unwm_acc = process_images_in_folder(args.unwm_images_dir, decoder, watermark, device, wm_flag=False)
+            unwm_acc = process_images_in_folder(
+                args.unwm_images_dir, decoder, watermark, device, wm_flag=False
+            )
             with open(target_unwm, 'w') as json_file:
                 json.dump(unwm_acc, json_file)
         else:
@@ -170,7 +181,10 @@ def main():
         
         print('original images are finishied')
         
-        wm_acc = process_images_in_folder(args.wm_images_dir, decoder, watermark, device, unwm_acc, wm_flag=True, edited=True) # for unedited images, using edited = False
+        wm_acc = process_images_in_folder(
+            args.wm_images_dir, decoder, watermark, device, unwm_acc, wm_flag=True, 
+            transformation=args.transformation
+        )
         with open(target_wm, 'w') as json_file:
             json.dump(wm_acc, json_file)
 
