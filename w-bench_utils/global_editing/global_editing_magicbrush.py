@@ -1,7 +1,6 @@
 from __future__ import annotations
 import math
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = "0"       # todo ***
 import random
 import einops
 import k_diffusion as K
@@ -66,8 +65,8 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("--resolution", default=512, type=int)
     parser.add_argument("--steps", default=50, type=int)
-    parser.add_argument("--config", default="./w-bench/global_editing/instruct-pix2pix/configs/generate.yaml", type=str)
-    parser.add_argument("--ckpt", default='./w-bench/global_editing/instruct-pix2pix/checkpoints/MagicBrush-epoch-52-step-4999.ckpt', type=str)
+    parser.add_argument("--config", default="./w-bench_utils/global_editing/instruct-pix2pix/configs/generate.yaml", type=str)
+    parser.add_argument("--ckpt", default='./w-bench_utils/global_editing/instruct-pix2pix/checkpoints/MagicBrush-epoch-52-step-4999.ckpt', type=str)
     parser.add_argument("--vae-ckpt", default=None, type=str)
     parser.add_argument("--input", type=str)            # todo: input_path_image: path4img
     parser.add_argument("--output", type=str)           # todo: output_path_image: path4img
