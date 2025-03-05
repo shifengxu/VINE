@@ -46,11 +46,11 @@ if __name__ == '__main__':
 
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
     GUIDANCE_RANGE = [5, 6, 7, 8, 9]
-    DEVICE = 'cuda:0'   # todo *** (CUDA)
+    DEVICE = 'cuda:0' 
 
     for GUIDANCE in GUIDANCE_RANGE:
         print(f"\n\n>> Currently processing the CHOICE of {GUIDANCE}...\n")
-        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{GUIDANCE}/")   # todo *** (OUTPUT)
+        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{GUIDANCE}/") 
         os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD ENDS ------------------------------------------------------------
 

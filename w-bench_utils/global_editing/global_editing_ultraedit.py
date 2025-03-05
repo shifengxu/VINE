@@ -50,10 +50,10 @@ if __name__ == '__main__':
 
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
     for CHOICE in [5, 6, 7, 8, 9]:
-        DEVICE = 'cuda:0'   # todo *** (CUDA)
+        DEVICE = 'cuda:0' 
 
         print(f"\n\n>> Currently processing the CHOICE of {CHOICE}...\n")
-        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{CHOICE}/")   # todo *** (OUTPUT)
+        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{CHOICE}/")  
         os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD ENDS ------------------------------------------------------------
 

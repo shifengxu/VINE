@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = "0"        # todo *** (CUDA)
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"  
 import sys
 sys.path.append("./w-bench/image_to_video/generative-models")
 import math

@@ -74,10 +74,10 @@ if __name__ == '__main__':
 
     for CHOICE in CHOICES:
         print(f"\n\n>> Currently processing the choice of {CHOICE}...\n")
-        INPUT_PATH_IMAGE = os.path.join(args.wm_images_folder, f"{CHOICE}")   # todo *** (IN)
-        INPUT_PATH_MASK = os.path.join(args.wbench_path, f"{CHOICE}/mask")   # todo *** (IN-Mask)
-        INPUT_PATH_PROMPT = os.path.join(args.wbench_path, f"{CHOICE}/prompts.csv")   # todo *** (IN-Prompt)
-        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{CHOICE}/")   # todo *** (OUT)
+        INPUT_PATH_IMAGE = os.path.join(args.wm_images_folder, f"{CHOICE}")   
+        INPUT_PATH_MASK = os.path.join(args.wbench_path, f"{CHOICE}/mask")   
+        INPUT_PATH_PROMPT = os.path.join(args.wbench_path, f"{CHOICE}/prompts.csv")   
+        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{CHOICE}/")  
         os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD ENDS ------------------------------------------------------------
 
