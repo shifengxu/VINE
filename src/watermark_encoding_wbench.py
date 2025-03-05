@@ -1,5 +1,4 @@
 import os, torch, time, argparse, gc
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 from vine_turbo import VINE_Turbo
 from accelerate.utils import set_seed
 from PIL import Image
@@ -9,11 +8,11 @@ from tqdm import tqdm
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_dir', type=str, default="/home/shilin1/projs/datasets/W-Bench-complete", help='path to the input image')
-    parser.add_argument('--output_dir', type=str, default='/home/shilin1/projs/datasets/vine_encoded', help='the directory to save the output')
+    parser.add_argument('--input_dir', type=str, default="./W-Bench", help='path to the input image')
+    parser.add_argument('--output_dir', type=str, default='./vine_encoded_wbench', help='the directory to save the output')
     parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Enc', help='pretrained_model_name')
     parser.add_argument('--message', type=str, default='Hello World!', help='the secret message to be encoded')
-    parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
+    parser.add_argument('--load_text', type=str, default='y', help='the flag to decide to use inputed text or random bits')
     args = parser.parse_args()
 
     set_seed(42)
@@ -31,7 +30,7 @@ if __name__ == "__main__":
     ])
 
     ### ============= load message =============
-    if args.load_text: # text to bits
+    if args.load_text == 'y': # text to bits
         if len(args.message) > 12:
             print('Error: Can only encode 100 bits (12 characters)')
             raise SystemExit

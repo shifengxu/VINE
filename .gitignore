@@ -3,3 +3,5 @@ __pycache__/
 checkpoints
 output_csv/
 instruct-pix2pix/
+W-Bench/
+vine_encoded_wbench/
