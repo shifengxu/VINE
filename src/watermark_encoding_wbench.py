@@ -48,7 +48,7 @@ if __name__ == "__main__":
     resolution = '512'
     total_time = 0
     with torch.no_grad():
-        category = ['SVD_1K']
+        category = ['DET_INVERSION_1K', 'INSTRUCT_1K', 'STO_REGENERATION_1K', 'LOCAL_EDITING_5K', 'SVD_1K', 'DISTORTION_1K', ]
         for c in category:
             if c == 'LOCAL_EDITING_5K':
                 sub_category = ['10-20', '20-30', '30-40', '40-50', '50-60']

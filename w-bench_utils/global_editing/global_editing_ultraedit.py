@@ -1,5 +1,4 @@
-import os
-import torch
+import os, argparse, torch
 import pandas as pd
 import PIL.Image
 from diffusers import StableDiffusion3InstructPix2PixPipeline, DDIMScheduler
@@ -40,27 +39,30 @@ def edit_by_UltraEdit(device, guidance, inputPath_img, inputPath_msk, inputPath_
 
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--wm_images_folder", type=str, default='./vine_encoded_wbench/512/INSTRUCT_1K')
+    parser.add_argument("--editing_prompt_path", type=str, default='./W-Bench/INSTRUCT_1K/prompts.csv')
+    parser.add_argument("--edited_output_folder", type=str, default='./edited_wmed_wbench')
+    args = parser.parse_args()
+        
     MODE = "INSTRUCT"
     SPEC = "_UltraEdit"
 
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
-    for WM in ["vine"]:   # todo *** (WM)
-        for CHOICE in [5, 6, 7, 8, 9]:
-            DEVICE = 'cuda:0'   # todo *** (CUDA)
+    for CHOICE in [5, 6, 7, 8, 9]:
+        DEVICE = 'cuda:0'   # todo *** (CUDA)
 
-            print(f"\n\n>> Currently processing the CHOICE of {CHOICE}...\n")
-            INPUT_PATH_IMAGE = f"/home/shilin1/projs/datasets/{WM}_encoded/512/INSTRUCT_1K"          # todo *** (INPUT)
-            INPUT_PATH_PROMPT = f"/home/shilin1/projs/datasets/W-Bench/INSTRUCT_1K/prompts.csv"
-            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/{MODE}{SPEC}/{CHOICE}/"   # todo *** (OUTPUT)
-            os.makedirs(OUTPUT_PATH, exist_ok=True)
+        print(f"\n\n>> Currently processing the CHOICE of {CHOICE}...\n")
+        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{CHOICE}/")   # todo *** (OUTPUT)
+        os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD ENDS ------------------------------------------------------------
 
-            print(f"\n>> Processing edited images for WM={WM} [{MODE}], with CHOICE={CHOICE}, on DEVICE={DEVICE}...")
-            edit_by_UltraEdit(
-                device=DEVICE,
-                guidance=CHOICE,
-                inputPath_img=INPUT_PATH_IMAGE,
-                inputPath_msk=None,
-                inputPath_prmt=INPUT_PATH_PROMPT,
-                outputPath=OUTPUT_PATH
-            )
+        print(f"\n>> Processing edited images for [{MODE}], with CHOICE={CHOICE}, on DEVICE={DEVICE}...")
+        edit_by_UltraEdit(
+            device=DEVICE,
+            guidance=CHOICE,
+            inputPath_img=args.wm_images_folder,
+            inputPath_msk=None,
+            inputPath_prmt=args.editing_prompt_path,
+            outputPath=OUTPUT_PATH
+        )

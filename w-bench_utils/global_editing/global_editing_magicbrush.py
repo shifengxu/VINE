@@ -75,6 +75,9 @@ def main():
     parser.add_argument("--cfg-text", type=float)       # todo: txt_g: int, {5, 6, 7, 8, 9}
     parser.add_argument("--cfg-image", type=float)      # todo: img_g: int, 1.5
     parser.add_argument("--seed", type=int)
+    parser.add_argument("--wm_images_folder", type=str, default='./vine_encoded_wbench/512/INSTRUCT_1K')
+    parser.add_argument("--editing_prompt_path", type=str, default='./W-Bench/INSTRUCT_1K/prompts.csv')
+    parser.add_argument("--edited_output_folder", type=str, default='./edited_wmed_wbench')
     args = parser.parse_args()
 
     config = OmegaConf.load(args.config)
@@ -89,69 +92,65 @@ def main():
     # todo - conda activate ip2p
     # todo - python .py
 
-    WMs = ["vine"]
     cfg_text_range = [5, 6, 7, 8, 9]
 
-    for WM in WMs:            # todo ***
-        MODE = "INSTRUCT"
-        SPEC = "_MagicBrush"
+    MODE = "INSTRUCT"
+    SPEC = "_MagicBrush"
 
-        for i in cfg_text_range:
-            args.cfg_text = i
-            args.cfg_image = 1.5
-            INPUT_PATH_IMAGE = f"/home/shilin1/projs/datasets/{WM}_encoded/512/INSTRUCT_1K" 
-            INPUT_PATH_PROMPT = f"/home/shilin1/projs/datasets/W-Bench/INSTRUCT_1K/prompts.csv"
-            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/{MODE}{SPEC}/{cfg_text_range[cfg_text_range.index(args.cfg_text)]}"
-            os.makedirs(OUTPUT_PATH, exist_ok=True)
-            print(f"\n>> Processing edited images for {WM}[{MODE}{SPEC}], with GUIDANCE of [{args.cfg_text}][{args.cfg_image}]...")
+    for i in cfg_text_range:
+        args.cfg_text = i
+        args.cfg_image = 1.5
+        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{cfg_text_range[cfg_text_range.index(args.cfg_text)]}")
+        os.makedirs(OUTPUT_PATH, exist_ok=True)
+        print(f"\n>> Processing edited images for [{MODE}{SPEC}], with GUIDANCE of [{args.cfg_text}][{args.cfg_image}]...")
 
-            IDs = pd.read_csv(INPUT_PATH_PROMPT).iloc[:, 1].tolist()
-            for idx, prompt in tqdm(enumerate(pd.read_csv(INPUT_PATH_PROMPT).iloc[:, 2].tolist())):
-                args.edit = prompt
-                args.input = os.path.join(INPUT_PATH_IMAGE, f"{str(idx)}_{str(IDs[idx])}_wm.png")
-                args.output = os.path.join(OUTPUT_PATH, f"{str(idx)}_{str(IDs[idx])}.png")
+        IDs = pd.read_csv(args.editing_prompt_path).iloc[:, 1].tolist()
+        for idx, prompt in tqdm(enumerate(pd.read_csv(args.editing_prompt_path).iloc[:, 2].tolist())):
+            args.edit = prompt
+            args.input = os.path.join(args.wm_images_folder, f"{str(idx)}_{str(IDs[idx])}_wm.png")
+            args.output = os.path.join(OUTPUT_PATH, f"{str(idx)}_{str(IDs[idx])}.png")
 
-                """ DASHBOARD END """
+            """ DASHBOARD END """
 
-                input_image = Image.open(args.input).convert("RGB")
-                width, height = input_image.size
-                factor = args.resolution / max(width, height)
-                factor = math.ceil(min(width, height) * factor / 64) * 64 / min(width, height)
-                width = int((width * factor) // 64) * 64
-                height = int((height * factor) // 64) * 64
-                input_image = ImageOps.fit(input_image, (width, height), method=Image.Resampling.LANCZOS)
+            input_image = Image.open(args.input).convert("RGB")
+            width, height = input_image.size
+            factor = args.resolution / max(width, height)
+            factor = math.ceil(min(width, height) * factor / 64) * 64 / min(width, height)
+            width = int((width * factor) // 64) * 64
+            height = int((height * factor) // 64) * 64
+            input_image = ImageOps.fit(input_image, (width, height), method=Image.Resampling.LANCZOS)
 
-                if args.edit == "":
-                    input_image.save(args.output)
-                    return
+            if args.edit == "":
+                input_image.save(args.output)
+                return
 
-                with torch.no_grad(), autocast("cuda"), model.ema_scope():
-                    cond = {}
-                    cond["c_crossattn"] = [model.get_learned_conditioning([args.edit])]
-                    input_image = 2 * torch.tensor(np.array(input_image)).float() / 255 - 1
-                    input_image = rearrange(input_image, "h w c -> 1 c h w").to(model.device)
-                    cond["c_concat"] = [model.encode_first_stage(input_image).mode()]
+            with torch.no_grad(), autocast("cuda"), model.ema_scope():
+                cond = {}
+                cond["c_crossattn"] = [model.get_learned_conditioning([args.edit])]
+                input_image = 2 * torch.tensor(np.array(input_image)).float() / 255 - 1
+                input_image = rearrange(input_image, "h w c -> 1 c h w").to(model.device)
+                cond["c_concat"] = [model.encode_first_stage(input_image).mode()]
 
-                    uncond = {}
-                    uncond["c_crossattn"] = [null_token]
-                    uncond["c_concat"] = [torch.zeros_like(cond["c_concat"][0])]
+                uncond = {}
+                uncond["c_crossattn"] = [null_token]
+                uncond["c_concat"] = [torch.zeros_like(cond["c_concat"][0])]
 
-                    sigmas = model_wrap.get_sigmas(args.steps)
+                sigmas = model_wrap.get_sigmas(args.steps)
 
-                    extra_args = {
-                        "cond": cond,
-                        "uncond": uncond,
-                        "text_cfg_scale": args.cfg_text,
-                        "image_cfg_scale": args.cfg_image,
-                    }
-                    torch.manual_seed(seed)
-                    z = torch.randn_like(cond["c_concat"][0]) * sigmas[0]
-                    z = K.sampling.sample_euler_ancestral(model_wrap_cfg, z, sigmas, extra_args=extra_args)
-                    x = model.decode_first_stage(z)
-                    x = torch.clamp((x + 1.0) / 2.0, min=0.0, max=1.0)
-                    x = 255.0 * rearrange(x, "1 c h w -> h w c")
-                    edited_image = Image.fromarray(x.type(torch.uint8).cpu().numpy())
-                edited_image.save(args.output)
+                extra_args = {
+                    "cond": cond,
+                    "uncond": uncond,
+                    "text_cfg_scale": args.cfg_text,
+                    "image_cfg_scale": args.cfg_image,
+                }
+                torch.manual_seed(seed)
+                z = torch.randn_like(cond["c_concat"][0]) * sigmas[0]
+                z = K.sampling.sample_euler_ancestral(model_wrap_cfg, z, sigmas, extra_args=extra_args)
+                x = model.decode_first_stage(z)
+                x = torch.clamp((x + 1.0) / 2.0, min=0.0, max=1.0)
+                x = 255.0 * rearrange(x, "1 c h w -> h w c")
+                edited_image = Image.fromarray(x.type(torch.uint8).cpu().numpy())
+            edited_image.save(args.output)
 
 
 if __name__ == "__main__":

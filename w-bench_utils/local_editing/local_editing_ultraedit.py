@@ -1,7 +1,5 @@
-import os
-import torch
+import os, torch, PIL.Image, argparse
 import pandas as pd
-import PIL.Image
 from diffusers import StableDiffusion3InstructPix2PixPipeline, DDIMScheduler
 from diffusers.utils import load_image
 from tqdm import tqdm
@@ -41,30 +39,35 @@ def edit_by_UltraEdit(device, guidance, inputPath_img, inputPath_msk, inputPath_
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--wm_images_folder", type=str, default='./vine_encoded_wbench/512/LOCAL_EDITING_5K')
+    parser.add_argument("--editing_prompt_path", type=str, default='./W-Bench/INSTRUCT_1K/prompts.csv')
+    parser.add_argument("--edited_output_folder", type=str, default='./edited_wmed_wbench')
+    args = parser.parse_args()
+    
     MODE = "REGION"
     SPEC = "_UltraEdit"
 
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
-    for WM in ["vine"]:   # todo *** (WM)
-        DEVICE = 'cuda:1'   # todo *** (CUDA)
-        GUIDANCE = 7.5
-        CHOICES = ['10-20', '20-30', '30-40', '40-50', '50-60']
+    DEVICE = 'cuda:0'   # todo *** (CUDA)
+    GUIDANCE = 7.5
+    CHOICES = ['10-20', '20-30', '30-40', '40-50', '50-60']
 
-        for CHOICE in CHOICES:
-            print(f"\n\n>> Currently processing the choice of {CHOICE}...\n")
-            INPUT_PATH_IMAGE = f"/home/shilin1/projs/datasets/{WM}_encoded/512/LOCAL_EDITING_5K/{CHOICE}"   # todo *** (IN)
-            INPUT_PATH_MASK = f"/home/shilin1/projs/datasets/W-Bench/LOCAL_EDITING_5K/{CHOICE}/mask"   # todo *** (IN-Mask)
-            INPUT_PATH_PROMPT = f"/home/shilin1/projs/datasets/W-Bench/LOCAL_EDITING_5K/{CHOICE}/prompts.csv"   # todo *** (IN-Prompt)
-            OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/{MODE}{SPEC}/{CHOICE}/"   # todo *** (OUT)
-            os.makedirs(OUTPUT_PATH, exist_ok=True)
+    for CHOICE in CHOICES:
+        print(f"\n\n>> Currently processing the choice of {CHOICE}...\n")
+        INPUT_PATH_IMAGE = os.path.join(args.wm_images_folder, f"{CHOICE}")   # todo *** (IN)
+        INPUT_PATH_MASK = os.path.join(args.wm_images_folder, f"{CHOICE}/mask")   # todo *** (IN-Mask)
+        INPUT_PATH_PROMPT = os.path.join(args.wm_images_folder, f"{CHOICE}/prompts.csv")   # todo *** (IN-Prompt)
+        OUTPUT_PATH = os.path.join(args.edited_output_folder, f"{MODE}{SPEC}/{CHOICE}/")   # todo *** (OUT)
+        os.makedirs(OUTPUT_PATH, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD ENDS ------------------------------------------------------------
 
-            print(f"\n>> Processing edited images for WM={WM} [{MODE}], with CHOICE={CHOICE}, on DEVICE={DEVICE}...")
-            edit_by_UltraEdit(
-                device=DEVICE,
-                guidance=GUIDANCE,
-                inputPath_img=INPUT_PATH_IMAGE,
-                inputPath_msk=INPUT_PATH_MASK,
-                inputPath_prmt=INPUT_PATH_PROMPT,
-                outputPath=OUTPUT_PATH
-            )
+        print(f"\n>> Processing edited images for [{MODE}], with CHOICE={CHOICE}, on DEVICE={DEVICE}...")
+        edit_by_UltraEdit(
+            device=DEVICE,
+            guidance=GUIDANCE,
+            inputPath_img=INPUT_PATH_IMAGE,
+            inputPath_msk=INPUT_PATH_MASK,
+            inputPath_prmt=INPUT_PATH_PROMPT,
+            outputPath=OUTPUT_PATH
+        )
