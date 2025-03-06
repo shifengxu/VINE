@@ -1,8 +1,7 @@
 diffusers/
 __pycache__/
 checkpoints
-output_csv/
 instruct-pix2pix/
 W-Bench/
 vine_encoded_wbench/
-edited_wmed_wbench/
+output/

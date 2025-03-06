@@ -4,5 +4,5 @@ login("") # login token needed! you can get token from huggingface profile
 import os
 os.environ['CURL_CA_BUNDLE'] = ''
 
-#snapshot_download(repo_id="stabilityai/stable-video-diffusion-img2vid", local_dir="./w-bench/image_to_video/generative-models/checkpoints/svd")
-snapshot_download(repo_id="stabilityai/stable-video-diffusion-img2vid-xt", local_dir="./w-bench/image_to_video/generative-models/checkpoints/svd_xt")
+#snapshot_download(repo_id="stabilityai/stable-video-diffusion-img2vid", local_dir="./w-bench_utils/image_to_video/generative-models/checkpoints/svd")
+snapshot_download(repo_id="stabilityai/stable-video-diffusion-img2vid-xt", local_dir="./w-bench_utils/image_to_video/generative-models/checkpoints/svd_xt")

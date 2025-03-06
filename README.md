@@ -151,6 +151,12 @@ W-Bench is the first benchmark to evaluate watermarking robustness across four t
 
 The images of W-Bench have been released on [HuggingFace](https://huggingface.co/datasets/Shilin-LU/W-Bench) and are also available on [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/EkJ9AIBUNglEt3sRKIBNA9oBI1BNoz2IEj9iizh4uKF-3Q?e=stTbpM). Below is a detailed guide on how to use all the image editing techniques listed in W-Bench.
 
+### Download W-Bench
+```shell
+cd VINE
+huggingface-cli download Shilin-LU/W-Bench --repo-type=dataset --local-dir W-Bench
+```
+
 ### Regeneration
 
 #### 1. Stochastic Regeneration
@@ -166,15 +172,14 @@ The images of W-Bench have been released on [HuggingFace](https://huggingface.co
 #### 3. MagicBrush
 ```shell
 # Creating the Environment for MagicBrush
-cd w-bench/global_editing
+cd w-bench_utils/global_editing
 git clone https://github.com/timothybrooks/instruct-pix2pix.git
 cd instruct-pix2pix
 conda env create -f environment.yaml
 conda activate ip2p
 
 # Download the MagicBrush Checkpoint
-mkdir checkpoints
-cd checkpoints
+mkdir checkpoints && cd checkpoints
 wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/MagicBrush-epoch-52-step-4999.ckpt
 ```
 
@@ -189,15 +194,14 @@ wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/Magic
 # Creating the Environment for SVD
 conda create -n svd python=3.8.5
 conda activate svd
-cd w-bench/image_to_video/generative-models
+cd w-bench_utils/image_to_video/generative-models
 pip3 install -r requirements/pt2.txt
 
 # Download the SVD Checkpoint
-mkdir checkpoints # path: ./w-bench/image_to_video/generative-models/checkpoints
-cd checkpoints
+mkdir checkpoints && cd checkpoints # path: ./w-bench_utils/image_to_video/generative-models/checkpoints
 huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
 
-# Alternatively, you may use the script to download: ./w-bench/image_to_video/generative-models/download_svd_ckpt.py
+# Alternatively, you may use the script to download: ./w-bench_utils/image_to_video/generative-models/download_svd_ckpt.py
 ```
 <br>
 

@@ -38,7 +38,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--wm_images_folder", type=str, default='./vine_encoded_wbench/512/INSTRUCT_1K')
     parser.add_argument("--editing_prompt_path", type=str, default='./W-Bench/INSTRUCT_1K/prompts.csv')
-    parser.add_argument("--edited_output_folder", type=str, default='./edited_wmed_wbench')
+    parser.add_argument("--edited_output_folder", type=str, default='./output/edited_wmed_wbench')
     args = parser.parse_args()
     
     MODE = "INSTRUCT"

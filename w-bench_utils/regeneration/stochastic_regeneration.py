@@ -7,7 +7,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--wm_images_folder", type=str, default="./vine_encoded_wbench/512/STO_REGENERATION_1K")
-    parser.add_argument("--edited_output_folder", type=str, default="./edited_wmed_wbench/STO_REGENERATION_1K")
+    parser.add_argument("--edited_output_folder", type=str, default="./output/edited_wmed_wbench/STO_REGENERATION_1K")
     args = parser.parse_args()
     
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------

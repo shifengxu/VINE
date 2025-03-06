@@ -15,7 +15,7 @@ parser.add_argument('--groundtruth_message', type=str, default='Hello', help='th
 parser.add_argument('--unwm_images_dir', type=str, default='./W-Bench', help='the path to unwatermarked images for calculating TPR, FPR, and AUROC metrics')
 parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/distortion/22_VINE/512', help='the path to watermarked images for decoding')
 parser.add_argument('--unwm_acc_dict', type=str, default=None, help='save the detection results of original images to reduce computational load')
-parser.add_argument('--output_dir', type=str, default='./output_csv/vine_r_new_dis', help='the path to save detection results of watermarked images')
+parser.add_argument('--output_dir', type=str, default='./output/detection_results/vine_r_new_dis', help='the path to save detection results of watermarked images')
 parser.add_argument('--decode_wbench_raw_data', type=str, default='y', help='decode the raw data of W-Bench')
 parser.add_argument("--transformation", type=str, choices=["edit", "distort", "orig"], default="distort", help='specify the transformation that the watermarked images to be decoded undergo')
 args = parser.parse_args()

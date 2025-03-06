@@ -1,8 +1,9 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = "0"  
+# os.environ['CUDA_VISIBLE_DEVICES'] = "0"  
 import sys
-sys.path.append("./w-bench/image_to_video/generative-models")
-import math
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(BASE_DIR, "./generative-models/"))
+import math, argparse
 from pathlib import Path
 from typing import List, Optional
 from tqdm import tqdm
@@ -36,6 +37,8 @@ def sample(
     azimuths_deg: Optional[List[float]] = None,  # For SV3D
     image_frame_ratio: Optional[float] = None,
     verbose: Optional[bool] = False,
+    SVDxt_OUTPUT_PATH = None,
+    targetFrames = None,
 ):
     """
     Simple script to generate a single sample conditioned on an image `input_path` or multiple images, one for each
@@ -45,33 +48,33 @@ def sample(
         num_frames = default(num_frames, 25)
         num_steps = default(num_steps, 30)
         output_folder = SVDxt_OUTPUT_PATH
-        model_config = "./w-bench/image_to_video/generative-models/scripts/sampling/configs/svd_xt.yaml"
+        model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_xt.yaml"
         """
         elif version == "svd_image_decoder":
             num_frames = default(num_frames, 14)
             num_steps = default(num_steps, 25)
             output_folder = default(
-                output_folder, "./w-bench/image_to_video/generative-models/outputs/svd_image_decoder/"
+                output_folder, "./w-bench_utils/image_to_video/generative-models/outputs/svd_image_decoder/"
             )
-            model_config = "./w-bench/image_to_video/generative-models/scripts/sampling/configs/svd_image_decoder.yaml"
+            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_image_decoder.yaml"
         elif version == "svd_xt_image_decoder":
             num_frames = default(num_frames, 25)
             num_steps = default(num_steps, 30)
             output_folder = default(
-                output_folder, "./w-bench/image_to_video/generative-models/outputs/svd_xt_image_decoder/"
+                output_folder, "./w-bench_utils/image_to_video/generative-models/outputs/svd_xt_image_decoder/"
             )
-            model_config = "./w-bench/image_to_video/generative-models/scripts/sampling/configs/svd_xt_image_decoder.yaml"
+            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_xt_image_decoder.yaml"
         elif version == "sv3d_u":
             num_frames = 21
             num_steps = default(num_steps, 50)
             output_folder = default(output_folder, "outputs/simple_video_sample/sv3d_u/")
-            model_config = "./w-bench/image_to_video/generative-models/scripts/sampling/configs/sv3d_u.yaml"
+            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/sv3d_u.yaml"
             cond_aug = 1e-5
         elif version == "sv3d_p":
             num_frames = 21
             num_steps = default(num_steps, 50)
             output_folder = default(output_folder, "outputs/simple_video_sample/sv3d_p/")
-            model_config = "./w-bench/image_to_video/generative-models/scripts/sampling/configs/sv3d_p.yaml"
+            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/sv3d_p.yaml"
             cond_aug = 1e-5
             if isinstance(elevations_deg, float) or isinstance(elevations_deg, int):
                 elevations_deg = [elevations_deg] * num_frames
@@ -346,13 +349,16 @@ def load_model(
 
 
 if __name__ == "__main__":
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--wm_images_folder', type=str, default="./vine_encoded_wbench/512/SVD_1K")
+    parser.add_argument('--edited_output_folder', type=str, default="./output/edited_wmed_wbench/SVD_1K")
+    args = parser.parse_args() 
+    
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
-    targetFrames = {key: 1 for key in [5, 7, 9, 11, 13, 15, 17, 19]}         # todo *** (Target Frames Control)
-
-    for WM in ["vine"]:  # todo ***
-        INPUT_PATH = f"/home/shilin1/projs/datasets/{WM}_encoded/512/SVD_1K"             # todo *** (IN)
-        SVDxt_OUTPUT_PATH = f"/home/shilin1/projs/datasets/edited_image/{WM}/SVD_1K"      # todo *** (OUT), see notes for clustering
-        os.makedirs(SVDxt_OUTPUT_PATH, exist_ok=True)
+    targetFrames = {key: 1 for key in [5, 7, 9, 11, 13, 15, 17, 19]}         # (Target Frames Control)
+    
+    os.makedirs(args.edited_output_folder, exist_ok=True)
 # TODO ---------------------------------------- DASHBOARD START ------------------------------------------------------------
 
-        sample(INPUT_PATH)
+    sample(INPUT_PATH=args.wm_images_folder, SVDxt_OUTPUT_PATH=args.edited_output_folder, targetFrames=targetFrames)
