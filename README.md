@@ -187,14 +187,14 @@ python src/quality_metrics_wbench.py \
 ### 3. Edit the Encoded W-Bench
 
 #### Regeneration
-1. Stochastic Regeneration
+- Stochastic Regeneration
 ```shell
 python w-bench_utils/regeneration/stochastic_regeneration.py       \
   --wm_images_folder ./vine_encoded_wbench/512/STO_REGENERATION_1K \
   --edited_output_folder ./output/edited_wmed_wbench/STO_REGENERATION_1K
 ```
 
-2. Deterministic Regeneration (aka, Image Inversion)
+- Deterministic Regeneration (aka, Image Inversion)
 ```shell
 python w-bench_utils/regeneration/stochastic_regeneration.py    \
   --wm_images_folder ./vine_encoded_wbench/512/DET_INVERSION_1K \
@@ -202,7 +202,7 @@ python w-bench_utils/regeneration/stochastic_regeneration.py    \
 ```
 
 #### Global Editing
-1. UltraEdit
+- UltraEdit
 ```shell
 python w-bench_utils/global_editing/global_editing_ultraedit.py \
   --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K      \
@@ -210,7 +210,7 @@ python w-bench_utils/global_editing/global_editing_ultraedit.py \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
 ```
 
-2. InstructPix2Pix
+- InstructPix2Pix
 ```shell
 python w-bench_utils/global_editing/global_editing_instructpix2pix.py \
   --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K            \
@@ -218,7 +218,7 @@ python w-bench_utils/global_editing/global_editing_instructpix2pix.py \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
 ```
 
-3. MagicBrush
+- MagicBrush
 ```shell
 # Creating the Environment for MagicBrush
 cd w-bench_utils/global_editing
@@ -241,7 +241,7 @@ python w-bench_utils/global_editing/global_editing_magicbrush.py \
 
 #### Local Editing
 
-1. UltraEdit
+- UltraEdit
 ```shell
 python w-bench_utils/local_editing/local_editing_ultraedit.py   \
   --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K \
@@ -249,7 +249,7 @@ python w-bench_utils/local_editing/local_editing_ultraedit.py   \
   --wbench_path ./W-Bench/LOCAL_EDITING_5K
 ```
 
-2. ControlNet-Inpainting
+- ControlNet-Inpainting
 ```shell
 python w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
   --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K           \
