@@ -53,7 +53,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
     - [Watermark Decoding](#watermark-decoding)
     - [Quality Metrics Calculation](#quality-metrics-calculation)
   - [W-Bench](#w\-bench)
-    - [Regeneration](#regeneration)
+    - [Download W-Bench](#1.-download-w--bench)
     - [Global Editing](#global-editing)
     - [Local Editing](#local-editing)
     - [Image to Video](#image-to-video)
@@ -281,7 +281,7 @@ python w-bench_utils/image_to_video/i2v_utils.py      \
   --target_folder ./output/edited_wmed_wbench/SVD_1K
 ```
 
-### 3. Decode the Entire W-Bench
+### 4. Decode the Entire W-Bench
 ```shell
 python src/watermark_decoding_wbench.py          \
   --pretrained_model_name Shilin-LU/VINE-R-Dec   \
