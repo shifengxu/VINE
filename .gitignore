@@ -5,3 +5,5 @@ instruct-pix2pix/
 W-Bench/
 vine_encoded_wbench/
 output/
+vineb_encoded_wbench/
+outputb/
