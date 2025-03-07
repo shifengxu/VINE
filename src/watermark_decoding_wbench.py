@@ -11,11 +11,15 @@ from sklearn import metrics
 parser = argparse.ArgumentParser()
 parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Dec', help='pretrained_model_name')
 parser.add_argument('--load_text', type=str, default='y', help='the flag to decide to use inputed text or random bits')
-parser.add_argument('--groundtruth_message', type=str, default='Hello', help='the secret message to be encoded')
+parser.add_argument('--groundtruth_message', type=str, default='Hello World!', help='the secret message to be encoded')
 parser.add_argument('--unwm_images_dir', type=str, default='./W-Bench', help='the path to unwatermarked images for calculating TPR, FPR, and AUROC metrics')
-parser.add_argument('--wm_images_dir', type=str, default='/home/shilin1/projs/datasets/distortion/22_VINE/512', help='the path to watermarked images for decoding')
+parser.add_argument('--wm_images_dir', type=str, default='./output/edited_wmed_wbench', 
+                    help="""The path to watermarked images for decoding. 
+                    For orig (the unedited/undistorted watermarked images), the default path is './vine_encoded_wbench';
+                    For edit, the default path is './output/edited_wmed_wbench';
+                    For distort, the default path is './output/distorted_wmed_wbench/512'; """)
 parser.add_argument('--unwm_acc_dict', type=str, default=None, help='save the detection results of original images to reduce computational load')
-parser.add_argument('--output_dir', type=str, default='./output/detection_results/vine_r_new_dis', help='the path to save detection results of watermarked images')
+parser.add_argument('--output_dir', type=str, default='./output/detection_results/vine_r', help='the path to save detection results of watermarked images')
 parser.add_argument('--decode_wbench_raw_data', type=str, default='y', help='decode the raw data of W-Bench')
 parser.add_argument("--transformation", type=str, choices=["edit", "distort", "orig"], default="distort", help='specify the transformation that the watermarked images to be decoded undergo')
 args = parser.parse_args()
@@ -54,13 +58,14 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
             
             if transformation == 'distort':
                 skip_keywords = [
-                    'mask', # 'DET_INVERSION_1K'
-                    'SVD_1K', 'DISTORTION_1K', 'INSTRUCT_1K',
+                    'mask', 
+                    'DET_INVERSION_1K',
+                    'SVD_1K', 'SVD_raw', 'INSTRUCT_1K', # 'DISTORTION_1K'
                     'LOCAL_EDITING_5K', 'STO_REGENERATION_1K'
                 ]
             else:
                 skip_keywords = [
-                    'mask', 
+                    'mask', 'SVD_raw',
                     # 'SVD_1K', 'DISTORTION_1K', 'INSTRUCT_1K',
                     # 'DET_INVERSION_1K', 'LOCAL_EDITING_5K', 'STO_REGENERATION_1K'
                 ]
@@ -74,7 +79,7 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                     acc.append(process_image(image_path, decoder, GTsecret, device))
 
             # wm images
-            if wm_flag == True:
+            if len(acc) != 0 and wm_flag == True:
                 parent_folder, last_folder = os.path.split(root)
                 
                 # edited images
@@ -110,7 +115,7 @@ def process_images_in_folder(folder_path, decoder, GTsecret, device, unwm_acc=No
                 }
                     
             # unwm images
-            else:
+            elif len(acc) != 0 and wm_flag == False:
                 if 'LOCAL_EDITING_5K' in root:
                     parent_folder, last_folder = os.path.split(root)
                     parent_folder_1, last_folder_1 = os.path.split(parent_folder)
@@ -179,7 +184,8 @@ def main():
     with torch.no_grad():
         if args.unwm_acc_dict is None:
             unwm_acc = process_images_in_folder(
-                args.unwm_images_dir, decoder, watermark, device, wm_flag=False
+                args.unwm_images_dir, decoder, watermark, device, wm_flag=False,
+                transformation=args.transformation
             )
             with open(target_unwm, 'w') as json_file:
                 json.dump(unwm_acc, json_file)

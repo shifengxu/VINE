@@ -1,18 +1,16 @@
-import os
-import shutil
-import re
+import os, shutil, argparse
 from tqdm import tqdm
 
 
-def cluster_svd_images():
-    source_folder = f'/home/shilin1/projs/datasets/edited_image/vine/SVD'
-    target_folder = f'/home/shilin1/projs/datasets/edited_image/vine/SVD_1K'
+def cluster_svd_images(args):
+    source_folder = args.source_folder
+    target_folder = args.target_folder
 
     small_folders = ["5", "7", "9", "11", "13", "15", "17", "19"]
     for folder in small_folders:
         os.makedirs(os.path.join(target_folder, folder), exist_ok=True)
 
-    for filename in os.listdir(source_folder):
+    for filename in tqdm(os.listdir(source_folder)):
         if filename.endswith('.png'):
             number = str(int(filename.split('_')[-1].split('.')[0]))
 
@@ -24,4 +22,9 @@ def cluster_svd_images():
 
 
 if __name__ == "__main__":
-    cluster_svd_images()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--source_folder', type=str, default="./output/edited_wmed_wbench/SVD_raw")
+    parser.add_argument('--target_folder', type=str, default="./output/edited_wmed_wbench/SVD_1K")
+    args = parser.parse_args() 
+    
+    cluster_svd_images(args)
