@@ -53,12 +53,15 @@ Current image watermarking methods are vulnerable to advanced image editing tech
     - [Watermark Decoding](#watermark-decoding)
     - [Quality Metrics Calculation](#quality-metrics-calculation)
   - [W-Bench](#w\-bench)
-    - [Download W-Bench](#1.-download-w--bench)
-    - [Global Editing](#global-editing)
-    - [Local Editing](#local-editing)
-    - [Image to Video](#image-to-video)
+    - [Download W-Bench](#1-download-w-bench)
+    - [Encode the Entire W-Bench](#2-encode-the-entire-w-bench)
+    - [Edit the Encoded W-Bench](#3-edit-the-encoded-w-bench)
+      - [Regeneration](#regeneration)
+      - [Global Editing](#global-editing)
+      - [Local Editing](#local-editing)
+      - [Image to Video](#image-to-video)
+    - [Decode the Entire W-Bench](#4-decode-the-entire-w-bench)
   - [Citation](#citation)
-
 
 <br>
 
@@ -181,7 +184,7 @@ python src/quality_metrics_wbench.py \
   --wbench_path ./W-Bench
 ```
 
-### 3. Edit the Encoded W-Bench Using Various Image Editing Techniques
+### 3. Edit the Encoded W-Bench
 
 #### Regeneration
 1. Stochastic Regeneration
