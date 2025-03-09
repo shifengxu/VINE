@@ -53,12 +53,14 @@ Current image watermarking methods are vulnerable to advanced image editing tech
   - [W-Bench](#w\-bench)
     - [Download W-Bench](#1-download-w-bench)
     - [Encode the Entire W-Bench](#2-encode-the-entire-w-bench)
-    - [Edit the Encoded W-Bench](#3-edit-the-encoded-w-bench)
+    - [Edit the Encoded W-Bench (or Distortion)](#3-edit-the-encoded-w-bench-or-distortion)
       - [Regeneration](#regeneration)
       - [Global Editing](#global-editing)
       - [Local Editing](#local-editing)
       - [Image to Video](#image-to-video)
+      - [Traditional Distortion (Brightness, Contrast, Blurring, Noise, Compression)](#traditional-distortion-brightness-contrast-blurring-noise-compression)
     - [Decode the Entire W-Bench](#4-decode-the-entire-w-bench)
+  - [Baseline Evaluation Data on W-Bench](#baseline-evaluation-data-on-w-bench)
   - [Citation](#citation)
 
 <br>
@@ -187,7 +189,7 @@ python vine/src/quality_metrics_wbench.py \
   --wbench_path ./W-Bench
 ```
 
-### 3. Edit the Encoded W-Bench
+### 3. Edit the Encoded W-Bench (or Distortion)
 
 #### Regeneration
 - **Stochastic Regeneration:**
@@ -222,6 +224,7 @@ python vine/w-bench_utils/global_editing/global_editing_instructpix2pix.py \
 ```
 
 - **MagicBrush:**
+
   1. **Setup for MagicBrush:**
     ```shell
     cd vine/w-bench_utils/global_editing
@@ -262,44 +265,75 @@ python vine/w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
 ```
 
 #### Image to Video
-1. **Setup for SVD:**
-   ```shell
-   conda create -n svd python=3.8.5
-   conda activate svd
-   cd vine/w-bench_utils/image_to_video/generative-models
-   pip3 install -r requirements/pt2.txt
-   ```
-2. **Download the SVD Checkpoint:**
-   ```shell
-   mkdir checkpoints && cd checkpoints
-   huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
-   ```
-   *Alternatively, use the provided script `download_svd_ckpt.py` for convenience.*
-3. **Run Image-to-Video Conversion:**
-   ```shell
-   python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
-     --wm_images_folder ./vine_encoded_wbench/512/SVD_1K          \
-     --edited_output_folder ./output/edited_wmed_wbench/SVD_raw 
-   ```
-4. **Post-process Video Frames:**
-   ```shell
-   python vine/w-bench_utils/image_to_video/i2v_utils.py \
-     --source_folder ./output/edited_wmed_wbench/SVD_raw \
-     --target_folder ./output/edited_wmed_wbench/SVD_1K
-   ```
+  1. **Setup for SVD:**
+    ```shell
+    conda create -n svd python=3.8.5
+    conda activate svd
+    cd vine/w-bench_utils/image_to_video/generative-models
+    pip3 install -r requirements/pt2.txt
+    ```
+  2. **Download the SVD Checkpoint:**
+    ```shell
+    mkdir checkpoints && cd checkpoints
+    huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
+    ```
+    *Alternatively, use the provided script `download_svd_ckpt.py` for convenience.*
+  3. **Run Image-to-Video Conversion:**
+    ```shell
+    python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
+      --wm_images_folder ./vine_encoded_wbench/512/SVD_1K          \
+      --edited_output_folder ./output/edited_wmed_wbench/SVD_raw 
+    ```
+  4. **Post-process Video Frames:**
+    ```shell
+    python vine/w-bench_utils/image_to_video/i2v_utils.py \
+      --source_folder ./output/edited_wmed_wbench/SVD_raw \
+      --target_folder ./output/edited_wmed_wbench/SVD_1K
+    ```
 
-### 4. Decode the Entire W-Bench
-Decode watermarked messages after editing:
+  ### 4. Decode the Entire W-Bench
+  Decode watermarked messages after editing:
+  ```shell
+  python vine/src/watermark_decoding_wbench.py     \
+    --pretrained_model_name Shilin-LU/VINE-R-Dec   \
+    --groundtruth_message 'Your Secret'            \
+    --unwm_images_dir ./W-Bench                    \
+    --wm_images_dir ./output/edited_wmed_wbench    \
+    --output_dir ./output/detection_results/vine_r \
+    --transformation edit                          \
+    --decode_wbench_raw_data n
+  ``` 
+
+#### Traditional Distortion (Brightness, Contrast, Blurring, Noise, Compression)
+Apply all traditional distortion techniques to the entire W-Bench dataset:
 ```shell
-python vine/src/watermark_decoding_wbench.py     \
-  --pretrained_model_name Shilin-LU/VINE-R-Dec   \
-  --groundtruth_message 'Your Secret'            \
-  --unwm_images_dir ./W-Bench                    \
-  --wm_images_dir ./output/edited_wmed_wbench    \
-  --output_dir ./output/detection_results/vine_r \
-  --transformation edit                          \
-  --decode_wbench_raw_data n
-``` 
+python vine/w-bench_utils/distortion/distortions.py \
+  --wm_images_folder ./vine_encoded_wbench          \
+  --edited_output_folder ./output/distorted_wmed_wbench
+```
+
+<br>
+
+## Baseline Evaluation Data on W-Bench
+
+We have evaluated **11 baseline watermarking methods + VINE-B + VINE-R** on the W-Bench dataset. For each baseline, the following data have been generated and saved:
+
+- **Watermarked Images:**  
+  Each baseline applied its watermarking algorithm to the entire W-Bench dataset. 
+
+- **Edited Images:**  
+  The watermarked images from all baselines were processed using every image editing method defined in W-Bench (e.g., regeneration, global editing, local editing, and image-to-video generation). 
+
+- **Distorted Images:**  
+  In addition to editing, the watermarked images were also subjected to all image distortion methods available in W-Bench. 
+
+All the data (watermarked, edited, and distorted images) have been uploaded publicly on OneDrive for easy access and further research. You can download the full dataset using the link below:
+
+<!-- [OneDrive Baseline Evaluation Data](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/EkJ9AIBUNglEt3sRKIBNA9oBI1BNoz2IEj9iizh4uKF-3Q?e=stTbpM) -->
+[To be updated]
+
+> **Note:** These data are provided for research purposes only. Please cite our work if you use our code and W-Bench in your research.
+
 
 <br>
 
