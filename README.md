@@ -291,19 +291,6 @@ python vine/w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
       --target_folder ./output/edited_wmed_wbench/SVD_1K
     ```
 
-  ### 4. Decode the Entire W-Bench
-  Decode watermarked messages after editing:
-  ```shell
-  python vine/src/watermark_decoding_wbench.py     \
-    --pretrained_model_name Shilin-LU/VINE-R-Dec   \
-    --groundtruth_message 'Your Secret'            \
-    --unwm_images_dir ./W-Bench                    \
-    --wm_images_dir ./output/edited_wmed_wbench    \
-    --output_dir ./output/detection_results/vine_r \
-    --transformation edit                          \
-    --decode_wbench_raw_data n
-  ``` 
-
 #### Traditional Distortion (Brightness, Contrast, Blurring, Noise, Compression)
 Apply all traditional distortion techniques to the entire W-Bench dataset:
 ```shell
@@ -311,6 +298,19 @@ python vine/w-bench_utils/distortion/distortions.py \
   --wm_images_folder ./vine_encoded_wbench          \
   --edited_output_folder ./output/distorted_wmed_wbench
 ```
+
+### 4. Decode the Entire W-Bench
+Decode watermarked messages after editing:
+```shell
+python vine/src/watermark_decoding_wbench.py     \
+  --pretrained_model_name Shilin-LU/VINE-R-Dec   \
+  --groundtruth_message 'Your Secret'            \
+  --unwm_images_dir ./W-Bench                    \
+  --wm_images_dir ./output/edited_wmed_wbench    \
+  --output_dir ./output/detection_results/vine_r \
+  --transformation edit                          \
+  --decode_wbench_raw_data n
+``` 
 
 <br>
 
