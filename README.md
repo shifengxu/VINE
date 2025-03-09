@@ -87,7 +87,7 @@ Our models, VINE-B and VINE-R, have been released on HuggingFace ([VINE-B-Enc](h
 <br>
 
 ## Demo
-We provide a complete demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation in `./src/demo.ipynb`. Please refer to it for detailed instructions.
+We provide a [Colab](https://colab.research.google.com/github/Shilin-LU/VINE/blob/main/demo_colab.ipynb) demo that includes the processes of watermark encoding, image editing, watermark decoding, and quality metrics calculation. Please refer to it for detailed instructions.
 
 <br>
 
@@ -96,7 +96,7 @@ We provide a complete demo that includes the processes of watermark encoding, im
 ### Watermark Encoding
 To encode a message into an image using VINE, please use the following commands:
 ```shell
-python src/watermark_encoding.py               \
+python vine/src/watermark_encoding.py          \
   --pretrained_model_name Shilin-LU/VINE-R-Enc \
   --input_path ./example/input/2.png           \
   --output_dir ./example/watermarked_img       \
@@ -105,7 +105,7 @@ python src/watermark_encoding.py               \
 
 To apply a watermark across the entire W-Bench, please use the following commands:
 ```shell
-python src/watermark_encoding_wbench.py        \
+python vine/src/watermark_encoding_wbench.py   \
   --pretrained_model_name Shilin-LU/VINE-R-Enc \
   --input_dir ./W-Bench                        \
   --output_dir ./vine_encoded_wbench           \
@@ -115,7 +115,7 @@ python src/watermark_encoding_wbench.py        \
 ### Image Editing
 A basic example of using [UltraEdit](https://github.com/HaozheZhao/UltraEdit) and Image Inversion for image editing. To edit an image, please use the following commands:
 ```shell
-python src/image_editing.py                       \
+python vine/src/image_editing.py                  \
   --model ultraedit                               \
   --input_path ./example/watermarked_img/2_wm.png \
   --output_dir ./example/edited_watermarked_img      
@@ -126,7 +126,7 @@ To apply other image editing methods listed in W-Bench to a group of images, ple
 ### Watermark Decoding
 To decode a message from a watermarked image that has been edited, please use the following commands:
 ```shell
-python src/watermark_decoding.py                              \
+python vine/src/watermark_decoding.py                         \
   --pretrained_model_name Shilin-LU/VINE-R-Dec                \
   --input_path ./example/edited_watermarked_img/2_wm_edit.png \
   --groundtruth_message 'Hello World!'                    
@@ -134,7 +134,7 @@ python src/watermark_decoding.py                              \
 
 To decode all watermarked images, please use the following commands:
 ```shell
-python src/watermark_decoding_wbench.py          \
+python vine/src/watermark_decoding_wbench.py     \
   --pretrained_model_name Shilin-LU/VINE-R-Dec   \
   --groundtruth_message 'Your Secret'            \
   --unwm_images_dir ./W-Bench                    \
@@ -147,7 +147,7 @@ python src/watermark_decoding_wbench.py          \
 ### Quality Metrics Calculation
 To calculate the quality metrics for single image (PSNR, SSIM, and LPIPS), please use the following commands:
 ```shell
-python src/quality_metrics.py         \
+python vine/src/quality_metrics.py    \
   --input_path ./example/input/2.png  \
   --wmed_input_path ./example/watermarked_img/2_wm.png                   
 ```
@@ -171,7 +171,7 @@ huggingface-cli download Shilin-LU/W-Bench --repo-type=dataset --local-dir W-Ben
 ### 2. Encode the Entire W-Bench
 
 ```shell
-python src/watermark_encoding_wbench.py        \
+python vine/src/watermark_encoding_wbench.py   \
   --pretrained_model_name Shilin-LU/VINE-R-Enc \
   --input_dir ./W-Bench                        \
   --output_dir ./vine_encoded_wbench           \
@@ -179,8 +179,8 @@ python src/watermark_encoding_wbench.py        \
 ```
 
 ```shell
-python src/quality_metrics_wbench.py \
-  --input_dir ./vine_encoded_wbench  \
+python vine/src/quality_metrics_wbench.py \
+  --input_dir ./vine_encoded_wbench       \
   --wbench_path ./W-Bench
 ```
 
@@ -189,39 +189,39 @@ python src/quality_metrics_wbench.py \
 #### Regeneration
 - Stochastic Regeneration
 ```shell
-python w-bench_utils/regeneration/stochastic_regeneration.py       \
+python vine/w-bench_utils/regeneration/stochastic_regeneration.py  \
   --wm_images_folder ./vine_encoded_wbench/512/STO_REGENERATION_1K \
   --edited_output_folder ./output/edited_wmed_wbench/STO_REGENERATION_1K
 ```
 
 - Deterministic Regeneration (aka, Image Inversion)
 ```shell
-python w-bench_utils/regeneration/stochastic_regeneration.py    \
-  --wm_images_folder ./vine_encoded_wbench/512/DET_INVERSION_1K \
+python vine/w-bench_utils/regeneration/stochastic_regeneration.py \
+  --wm_images_folder ./vine_encoded_wbench/512/DET_INVERSION_1K   \
   --edited_output_folder ./output/edited_wmed_wbench/DET_INVERSION_1K
 ```
 
 #### Global Editing
 - UltraEdit
 ```shell
-python w-bench_utils/global_editing/global_editing_ultraedit.py \
-  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K      \
-  --edited_output_folder ./output/edited_wmed_wbench            \
+python vine/w-bench_utils/global_editing/global_editing_ultraedit.py \
+  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K           \
+  --edited_output_folder ./output/edited_wmed_wbench                 \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
 ```
 
 - InstructPix2Pix
 ```shell
-python w-bench_utils/global_editing/global_editing_instructpix2pix.py \
-  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K            \
-  --edited_output_folder ./output/edited_wmed_wbench                  \
+python vine/w-bench_utils/global_editing/global_editing_instructpix2pix.py \
+  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K                 \
+  --edited_output_folder ./output/edited_wmed_wbench                       \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
 ```
 
 - MagicBrush
 ```shell
 # Creating the Environment for MagicBrush
-cd w-bench_utils/global_editing
+cd vine/w-bench_utils/global_editing
 git clone https://github.com/timothybrooks/instruct-pix2pix.git
 cd instruct-pix2pix
 conda env create -f environment.yaml
@@ -233,9 +233,9 @@ wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/Magic
 ```
 
 ```shell
-python w-bench_utils/global_editing/global_editing_magicbrush.py \
-  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K       \
-  --edited_output_folder ./output/edited_wmed_wbench             \
+python vine/w-bench_utils/global_editing/global_editing_magicbrush.py \
+  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K            \
+  --edited_output_folder ./output/edited_wmed_wbench                  \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
 ```
 
@@ -243,17 +243,17 @@ python w-bench_utils/global_editing/global_editing_magicbrush.py \
 
 - UltraEdit
 ```shell
-python w-bench_utils/local_editing/local_editing_ultraedit.py   \
-  --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K \
-  --edited_output_folder ./output/edited_wmed_wbench            \
+python vine/w-bench_utils/local_editing/local_editing_ultraedit.py \
+  --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K    \
+  --edited_output_folder ./output/edited_wmed_wbench               \
   --wbench_path ./W-Bench/LOCAL_EDITING_5K
 ```
 
 - ControlNet-Inpainting
 ```shell
-python w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
-  --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K           \
-  --edited_output_folder ./output/edited_wmed_wbench                      \
+python vine/w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
+  --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K                \
+  --edited_output_folder ./output/edited_wmed_wbench                           \
   --wbench_path ./W-Bench/LOCAL_EDITING_5K
 ```
 
@@ -262,31 +262,31 @@ python w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
 # Creating the Environment for SVD
 conda create -n svd python=3.8.5
 conda activate svd
-cd w-bench_utils/image_to_video/generative-models
+cd vine/w-bench_utils/image_to_video/generative-models
 pip3 install -r requirements/pt2.txt
 
 # Download the SVD Checkpoint
-mkdir checkpoints && cd checkpoints # path: ./w-bench_utils/image_to_video/generative-models/checkpoints
+mkdir checkpoints && cd checkpoints # path: ./vine/w-bench_utils/image_to_video/generative-models/checkpoints
 huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
 
-# Alternatively, you may use the script to download: ./w-bench_utils/image_to_video/generative-models/download_svd_ckpt.py
+# Alternatively, you may use the script to download: ./vine/w-bench_utils/image_to_video/generative-models/download_svd_ckpt.py
 ```
 
 ```shell
-python w-bench_utils/image_to_video/image_to_video_svd.py \
-  --wm_images_folder ./vine_encoded_wbench/512/SVD_1K     \
+python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
+  --wm_images_folder ./vine_encoded_wbench/512/SVD_1K          \
   --edited_output_folder ./output/edited_wmed_wbench/SVD_raw 
 ```
 
 ```shell
-python w-bench_utils/image_to_video/i2v_utils.py      \
+python vine/w-bench_utils/image_to_video/i2v_utils.py \
   --source_folder ./output/edited_wmed_wbench/SVD_raw \
   --target_folder ./output/edited_wmed_wbench/SVD_1K
 ```
 
 ### 4. Decode the Entire W-Bench
 ```shell
-python src/watermark_decoding_wbench.py          \
+python vine/src/watermark_decoding_wbench.py     \
   --pretrained_model_name Shilin-LU/VINE-R-Dec   \
   --groundtruth_message 'Your Secret'            \
   --unwm_images_dir ./W-Bench                    \
