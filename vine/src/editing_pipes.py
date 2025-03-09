@@ -24,6 +24,20 @@ def edit_by_UltraEdit(pipe, image, prompt, text_guidance, num_inference_steps):
     return image
 
 
+def edit_by_InstructPix2Pix(pipe, image, prompt, guidance, num_inference_steps=50):
+    
+    image = pipe(
+        prompt=prompt,
+        image=image,
+        num_inference_steps=num_inference_steps,
+        image_guidance_scale=1.5,
+        guidance_scale=guidance,
+        generator=torch.manual_seed(42),
+    ).images[0]
+
+    return image
+        
+
 def load_image(imgname: str, target_size: Optional[Union[int, Tuple[int, int]]] = None) -> torch.Tensor:
     pil_img = Image.open(imgname).convert('RGB')
     if target_size is not None:
