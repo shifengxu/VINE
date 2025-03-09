@@ -1,30 +1,18 @@
 from setuptools import setup, find_packages
-from setuptools.command.install import install
 import os
-import subprocess
-
-class CustomInstallCommand(install):
-    def run(self):
-        # 首先运行标准的安装
-        install.run(self)
-        # 切换到 diffusers 目录并执行 editable 安装
-        diffusers_dir = os.path.join(os.path.dirname(__file__), 'diffusers')
-        if os.path.exists(diffusers_dir):
-            subprocess.check_call(['pip', 'install', '-e', diffusers_dir])
-        else:
-            print("Warning: diffusers directory not found. Please run 'cd diffusers && pip install -e .' manually.")
 
 setup(
-    name="vine",
-    version="0.1.0",
-    description="A Python package for vine project",
-    long_description=open("README.md").read() if os.path.exists("README.md") else "",
-    long_description_content_type="text/markdown",
-    author="Shilin Lu",
-    author_email="shilin002@e.ntu.edu.sg",
-    url="https://github.com/Shilin-LU/VINE",
-    packages=find_packages(),
+    name="vine",                       # Package name, consistent with the project name
+    version="0.1.0",                   # Initial version number
+    description="A Python package for vine project",  # Short description
+    long_description=open("README.md").read() if os.path.exists("README.md") else "",  # Optional, long description from README
+    long_description_content_type="text/markdown",  # If README is in Markdown format
+    author="Shilin Lu",               
+    author_email="shilin002@e.ntu.edu.sg",  
+    url="https://github.com/Shilin-LU/VINE",  
+    packages=find_packages(),          # Automatically discover packages (assumes code is in vine/ directory)
     install_requires=[
+        # Dependencies extracted from environment.yaml
         "einops==0.8.0",
         "numpy==1.26.4",
         "open-clip-torch==2.26.1",
@@ -58,15 +46,14 @@ setup(
         "ipykernel",
         "sentencepiece",
         "clip @ git+https://github.com/openai/CLIP.git",
+        # Install diffusers from the VINE repository's diffusers subdirectory
+        "diffusers @ git+https://github.com/Shilin-LU/VINE.git#subdirectory=diffusers",
     ],
-    python_requires=">=3.10",
+    python_requires=">=3.10",          # Specify Python version
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
         "Operating System :: OS Independent",
     ],
-    include_package_data=True,
-    cmdclass={
-        'install': CustomInstallCommand,
-    },
+    include_package_data=True,         # Include non-code files (e.g., data files) if any
 )
