@@ -23,7 +23,7 @@ setup(
     author="Shilin Lu",
     author_email="shilin002@e.ntu.edu.sg",
     url="https://github.com/Shilin-LU/VINE",
-    packages=find_packages(where='vine'),
+    packages=find_packages(),
     install_requires=[
         "einops==0.8.0",
         "numpy==1.26.4",
