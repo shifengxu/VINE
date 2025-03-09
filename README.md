@@ -206,6 +206,8 @@ python vine/w-bench_utils/regeneration/stochastic_regeneration.py \
   --edited_output_folder ./output/edited_wmed_wbench/DET_INVERSION_1K
 ```
 
+---
+
 #### Global Editing
 - **UltraEdit:**
 ```shell
@@ -225,26 +227,28 @@ python vine/w-bench_utils/global_editing/global_editing_instructpix2pix.py \
 
 - **MagicBrush:**
 
-  1. **Setup for MagicBrush:**
-    ```shell
-    cd vine/w-bench_utils/global_editing
-    git clone https://github.com/timothybrooks/instruct-pix2pix.git
-    cd instruct-pix2pix
-    conda env create -f environment.yaml
-    conda activate ip2p
-    ```
-  2. **Download the MagicBrush Checkpoint:**
-    ```shell
-    mkdir checkpoints && cd checkpoints
-    wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/MagicBrush-epoch-52-step-4999.ckpt
-    ```
-  3. **Run MagicBrush Editing:**
-    ```shell
-    python vine/w-bench_utils/global_editing/global_editing_magicbrush.py \
-      --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K            \
-      --edited_output_folder ./output/edited_wmed_wbench                  \
-      --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
-    ```
+1. Setup for MagicBrush:
+```shell
+cd vine/w-bench_utils/global_editing
+git clone https://github.com/timothybrooks/instruct-pix2pix.git
+cd instruct-pix2pix
+conda env create -f environment.yaml
+conda activate ip2p
+```
+2. Download the MagicBrush Checkpoint:
+```shell
+mkdir checkpoints && cd checkpoints
+wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/MagicBrush-epoch-52-step-4999.ckpt
+```
+3. Run MagicBrush Editing:
+```shell
+python vine/w-bench_utils/global_editing/global_editing_magicbrush.py \
+  --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K            \
+  --edited_output_folder ./output/edited_wmed_wbench                  \
+  --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
+```
+
+---
 
 #### Local Editing
 
@@ -264,32 +268,47 @@ python vine/w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
   --wbench_path ./W-Bench/LOCAL_EDITING_5K
 ```
 
+---
+
 #### Image to Video
-  1. **Setup for SVD:**
-    ```shell
-    conda create -n svd python=3.8.5
-    conda activate svd
-    cd vine/w-bench_utils/image_to_video/generative-models
-    pip3 install -r requirements/pt2.txt
-    ```
-  2. **Download the SVD Checkpoint:**
-    ```shell
-    mkdir checkpoints && cd checkpoints
-    huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
-    ```
-    *Alternatively, use the provided script `download_svd_ckpt.py` for convenience.*
-  3. **Run Image-to-Video Conversion:**
-    ```shell
-    python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
-      --wm_images_folder ./vine_encoded_wbench/512/SVD_1K          \
-      --edited_output_folder ./output/edited_wmed_wbench/SVD_raw 
-    ```
-  4. **Post-process Video Frames:**
-    ```shell
-    python vine/w-bench_utils/image_to_video/i2v_utils.py \
-      --source_folder ./output/edited_wmed_wbench/SVD_raw \
-      --target_folder ./output/edited_wmed_wbench/SVD_1K
-    ```
+
+- **Stable Video Diffusion (SVD):**
+  
+1. Setup for SVD:
+ 
+```shell
+conda create -n svd python=3.8.5
+conda activate svd
+cd vine/w-bench_utils/image_to_video/generative-models
+pip3 install -r requirements/pt2.txt
+```
+
+2. Download the SVD Checkpoint:
+ 
+```shell
+mkdir checkpoints && cd checkpoints
+huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-type=model --local-dir svd_xt
+```
+
+*Alternatively, use the provided script `download_svd_ckpt.py` to download.*
+
+3. Run Image-to-Video Conversion:
+
+```shell
+python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
+  --wm_images_folder ./vine_encoded_wbench/512/SVD_1K          \
+  --edited_output_folder ./output/edited_wmed_wbench/SVD_raw 
+```
+
+4. Post-process Video Frames:
+ 
+```shell
+python vine/w-bench_utils/image_to_video/i2v_utils.py \
+  --source_folder ./output/edited_wmed_wbench/SVD_raw \
+  --target_folder ./output/edited_wmed_wbench/SVD_1K
+```
+
+---
 
 #### Traditional Distortion (Brightness, Contrast, Blurring, Noise, Compression)
 Apply all traditional distortion techniques to the entire W-Bench dataset:
