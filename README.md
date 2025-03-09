@@ -2,7 +2,7 @@
 
 <!-- [![arXiv](https://img.shields.io/badge/arXiv-TF--ICON-green.svg?style=plastic)](https://arxiv.org/abs/2307.12493) -->
 
-[![arXiv](https://img.shields.io/badge/arXiv-VINE-green.svg?style=plastic)](https://arxiv.org/abs/2410.18775) [![HuggingFace](https://img.shields.io/badge/HuggingFace-Model-blue.svg?style=plastic)](https://huggingface.co/Shilin-LU) [![HuggingFace](https://img.shields.io/badge/HuggingFace-W--Bench-red.svg?style=plastic)](https://huggingface.co/datasets/Shilin-LU/W-Bench)
+[![arXiv](https://img.shields.io/badge/arXiv-VINE-green.svg?style=plastic)](https://arxiv.org/abs/2410.18775) [![HuggingFace](https://img.shields.io/badge/HuggingFace-Model-blue.svg?style=plastic)](https://huggingface.co/Shilin-LU) [![HuggingFace](https://img.shields.io/badge/HuggingFace-W--Bench-red.svg?style=plastic)](https://huggingface.co/datasets/Shilin-LU/W-Bench) [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Shilin-LU/VINE/demo_colab.ipynb)
 
 Official implementation of [Robust Watermarking Using Generative Priors Against Image Editing: From Benchmarking to Advances](https://arxiv.org/abs/2410.18775)
 
