@@ -318,6 +318,8 @@ python vine/w-bench_utils/distortion/distortions.py \
   --edited_output_folder ./output/distorted_wmed_wbench
 ```
 
+---
+
 ### 4. Decode the Entire W-Bench
 Decode watermarked messages after editing:
 ```shell
