@@ -1,5 +1,5 @@
 import os, torch, time, argparse, gc
-from vine_turbo import VINE_Turbo
+from vine.src.vine_turbo import VINE_Turbo
 from accelerate.utils import set_seed
 from PIL import Image
 from torchvision import transforms

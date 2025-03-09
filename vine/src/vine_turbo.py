@@ -7,7 +7,7 @@ from diffusers import AutoencoderKL, UNet2DConditionModel
 from peft import LoraConfig
 from huggingface_hub import PyTorchModelHubMixin
 from vine.src.stega_encoder_decoder import ConditionAdaptor
-from model import make_1step_sched, my_vae_encoder_fwd, my_vae_decoder_fwd, download_url
+from vine.src.model import make_1step_sched, my_vae_encoder_fwd, my_vae_decoder_fwd, download_url
 
 
 class VAE_encode(nn.Module):

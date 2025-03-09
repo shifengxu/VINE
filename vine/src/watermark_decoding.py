@@ -1,6 +1,5 @@
 import os, torch, argparse
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
-from stega_encoder_decoder import CustomConvNeXt
+from vine.src.stega_encoder_decoder import CustomConvNeXt
 from accelerate.utils import set_seed
 from PIL import Image
 from torchvision import transforms

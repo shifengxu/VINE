@@ -2,7 +2,7 @@ import os, torch, argparse
 from accelerate.utils import set_seed
 from PIL import Image
 from diffusers import StableDiffusion3InstructPix2PixPipeline, StableDiffusionPipeline
-from editing_pipes import edit_by_UltraEdit, ddim_inversion
+from vine.src.editing_pipes import edit_by_UltraEdit, ddim_inversion
 
 
 def main(args, device):
