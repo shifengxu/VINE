@@ -10,7 +10,7 @@ setup(
     author="Shilin Lu",               
     author_email="shilin002@e.ntu.edu.sg",  
     url="https://github.com/Shilin-LU/VINE",  
-    packages=["src", "W-bench_utils"],          # Automatically discover packages (assumes code is in vine/ directory)
+    packages=["src", "w-bench_utils"],          # Automatically discover packages (assumes code is in vine/ directory)
     install_requires=[
         # Dependencies extracted from environment.yaml
         "einops==0.8.0",
