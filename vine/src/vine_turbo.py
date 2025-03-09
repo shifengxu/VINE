@@ -6,9 +6,7 @@ from transformers import AutoTokenizer, CLIPTextModel
 from diffusers import AutoencoderKL, UNet2DConditionModel
 from peft import LoraConfig
 from huggingface_hub import PyTorchModelHubMixin
-from stega_encoder_decoder import ConditionAdaptor
-p = "src/"
-sys.path.append(p)
+from vine.src.stega_encoder_decoder import ConditionAdaptor
 from model import make_1step_sched, my_vae_encoder_fwd, my_vae_decoder_fwd, download_url
 
 
