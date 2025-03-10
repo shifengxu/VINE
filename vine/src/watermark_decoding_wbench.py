@@ -1,5 +1,5 @@
 import os, torch, argparse, json
-from vine.src.stega_encoder_decoder import CustomConvNeXt
+from stega_encoder_decoder import CustomConvNeXt
 from accelerate.utils import set_seed
 from PIL import Image
 from torchvision import transforms

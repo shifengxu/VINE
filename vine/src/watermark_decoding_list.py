@@ -31,26 +31,31 @@ def main(args, device):
         transforms.Resize(256, interpolation=transforms.InterpolationMode.BICUBIC), 
         transforms.ToTensor(),
     ])
-    image = Image.open(args.input_path).convert("RGB")
-    image = t_val_256(image).unsqueeze(0).to(device)
+    
+    for root, _, files in os.walk(args.input_folder):
+        for file in files:
+            input_path = os.path.join(root, file)
+            
+            image = Image.open(input_path).convert("RGB")
+            image = t_val_256(image).unsqueeze(0).to(device)
 
-    ### ============= watermark decoding & detection =============
-    pred_watermark = decoder(image)
-    pred_watermark = np.array(pred_watermark[0].cpu().detach())
-    pred_watermark = np.round(pred_watermark)
-    pred_watermark = pred_watermark.astype(int)
-    pred_watermark_list = pred_watermark.tolist()
-    groundtruth_watermark_list = watermark[0].cpu().detach().numpy().astype(int).tolist()
+            ### ============= watermark decoding & detection =============
+            pred_watermark = decoder(image)
+            pred_watermark = np.array(pred_watermark[0].cpu().detach())
+            pred_watermark = np.round(pred_watermark)
+            pred_watermark = pred_watermark.astype(int)
+            pred_watermark_list = pred_watermark.tolist()
+            groundtruth_watermark_list = watermark[0].cpu().detach().numpy().astype(int).tolist()
 
-    same_elements_count = sum(x == y for x, y in zip(groundtruth_watermark_list, pred_watermark_list))
-    acc = same_elements_count / 100
-    print('Decoding Bit Accuracy:', acc)
+            same_elements_count = sum(x == y for x, y in zip(groundtruth_watermark_list, pred_watermark_list))
+            acc = same_elements_count / 100
+            print('Decoding Bit Accuracy:', acc)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_path', type=str, default='./example/edited_watermarked_img/2_wm_edit.png', help='path to the (edited) watermarked image')
-    parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Dec', help='pretrained_model_name')
+    parser.add_argument('--input_folder', type=str, default='/home/shilin/shilin/VINE/watermarked_imgs', help='path to the (edited) watermarked image')
+    parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-B-Dec', help='pretrained_model_name')
     parser.add_argument('--groundtruth_message', type=str, default='Hello World!', help='the secret message to be encoded')
     parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
     args = parser.parse_args()
