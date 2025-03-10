@@ -72,10 +72,9 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 ```shell
 git clone https://github.com/Shilin-LU/VINE.git
 cd VINE
-conda env create -f environment.yaml
-conda activate vine
-cd diffusers
-pip install -e .
+conda create -n vine python=3.10
+conda activate shilin_test
+pip install git+https://github.com/Shilin-LU/VINE
 ```
 
 > **Tip:** Note that when editing images using MagicBrush and SVD, the environment should use the specific environments listed in their respective sections below. In all other cases, the **vine** environment is sufficient to run all code, including watermark encoding, decoding, regeneration, local editing, and other global editing tasks.
@@ -101,6 +100,15 @@ python vine/src/watermark_encoding.py          \
   --input_path ./example/input/2.png           \
   --output_dir ./example/watermarked_img       \
   --message 'Hello World!'
+```
+
+Watermark a list of images:
+```shell
+python vine/src/watermark_encoding_list.py     \
+  --pretrained_model_name Shilin-LU/VINE-R-Enc \
+  --input_dir ./example/input                  \
+  --output_dir ./example/watermarked_img       \
+  --message 'Your Secret'
 ```
 
 Watermark the entire W-Bench:
@@ -131,7 +139,15 @@ python vine/src/watermark_decoding.py                         \
   --groundtruth_message 'Hello World!'                    
 ```
 
-Decode messages from a batch of images:
+Extract the embedded message from a list of images:
+```shell
+python vine/src/watermark_decoding_list.py     \
+  --pretrained_model_name Shilin-LU/VINE-R-Dec \
+  --input_path ./example/watermarked_img       \
+  --groundtruth_message 'Hello World!'                    
+```
+
+Decode messages from the edited W-Bench:
 ```shell
 python vine/src/watermark_decoding_wbench.py     \
   --pretrained_model_name Shilin-LU/VINE-R-Dec   \

@@ -84,9 +84,9 @@ def main(args, device):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_folder', type=str, default='/home/shilin/shilin/VINE/original_imgs', help='path to the input image')
-    parser.add_argument('--output_dir', type=str, default='/home/shilin/shilin/VINE/watermarked_imgs', help='the directory to save the output')
-    parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-B-Enc', help='pretrained_model_name')
+    parser.add_argument('--input_folder', type=str, default='./example/input', help='path to the input image')
+    parser.add_argument('--output_dir', type=str, default='./example/watermarked_img', help='the directory to save the output')
+    parser.add_argument('--pretrained_model_name', type=str, default='Shilin-LU/VINE-R-Enc', help='pretrained_model_name')
     parser.add_argument('--message', type=str, default='Hello World!', help='the secret message to be encoded')
     parser.add_argument('--load_text', type=bool, default=True, help='the flag to decide to use inputed text or random bits')
     args = parser.parse_args()
