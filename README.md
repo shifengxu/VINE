@@ -210,14 +210,14 @@ python vine/src/quality_metrics_wbench.py \
 #### Regeneration
 - **Stochastic Regeneration:**
 ```shell
-python vine/w-bench_utils/regeneration/stochastic_regeneration.py  \
+python vine/w_bench_utils/regeneration/stochastic_regeneration.py  \
   --wm_images_folder ./vine_encoded_wbench/512/STO_REGENERATION_1K \
   --edited_output_folder ./output/edited_wmed_wbench/STO_REGENERATION_1K
 ```
 
 - **Deterministic Regeneration (aka, Image Inversion):**
 ```shell
-python vine/w-bench_utils/regeneration/stochastic_regeneration.py \
+python vine/w_bench_utils/regeneration/stochastic_regeneration.py \
   --wm_images_folder ./vine_encoded_wbench/512/DET_INVERSION_1K   \
   --edited_output_folder ./output/edited_wmed_wbench/DET_INVERSION_1K
 ```
@@ -227,7 +227,7 @@ python vine/w-bench_utils/regeneration/stochastic_regeneration.py \
 #### Global Editing
 - **UltraEdit:**
 ```shell
-python vine/w-bench_utils/global_editing/global_editing_ultraedit.py \
+python vine/w_bench_utils/global_editing/global_editing_ultraedit.py \
   --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K           \
   --edited_output_folder ./output/edited_wmed_wbench                 \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
@@ -235,7 +235,7 @@ python vine/w-bench_utils/global_editing/global_editing_ultraedit.py \
 
 - **InstructPix2Pix:**
 ```shell
-python vine/w-bench_utils/global_editing/global_editing_instructpix2pix.py \
+python vine/w_bench_utils/global_editing/global_editing_instructpix2pix.py \
   --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K                 \
   --edited_output_folder ./output/edited_wmed_wbench                       \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
@@ -245,7 +245,7 @@ python vine/w-bench_utils/global_editing/global_editing_instructpix2pix.py \
 
 1. Setup for MagicBrush:
 ```shell
-cd vine/w-bench_utils/global_editing
+cd vine/w_bench_utils/global_editing
 git clone https://github.com/timothybrooks/instruct-pix2pix.git
 cd instruct-pix2pix
 conda env create -f environment.yaml
@@ -258,7 +258,7 @@ wget https://huggingface.co/osunlp/InstructPix2Pix-MagicBrush/resolve/main/Magic
 ```
 3. Run MagicBrush Editing:
 ```shell
-python vine/w-bench_utils/global_editing/global_editing_magicbrush.py \
+python vine/w_bench_utils/global_editing/global_editing_magicbrush.py \
   --wm_images_folder ./vine_encoded_wbench/512/INSTRUCT_1K            \
   --edited_output_folder ./output/edited_wmed_wbench                  \
   --editing_prompt_path ./W-Bench/INSTRUCT_1K/prompts.csv   
@@ -270,7 +270,7 @@ python vine/w-bench_utils/global_editing/global_editing_magicbrush.py \
 
 - **UltraEdit:**
 ```shell
-python vine/w-bench_utils/local_editing/local_editing_ultraedit.py \
+python vine/w_bench_utils/local_editing/local_editing_ultraedit.py \
   --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K    \
   --edited_output_folder ./output/edited_wmed_wbench               \
   --wbench_path ./W-Bench/LOCAL_EDITING_5K
@@ -278,7 +278,7 @@ python vine/w-bench_utils/local_editing/local_editing_ultraedit.py \
 
 - **ControlNet-Inpainting:**
 ```shell
-python vine/w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
+python vine/w_bench_utils/local_editing/local_editing_controlnet_inpainting.py \
   --wm_images_folder ./vine_encoded_wbench/512/LOCAL_EDITING_5K                \
   --edited_output_folder ./output/edited_wmed_wbench                           \
   --wbench_path ./W-Bench/LOCAL_EDITING_5K
@@ -295,7 +295,7 @@ python vine/w-bench_utils/local_editing/local_editing_controlnet_inpainting.py \
 ```shell
 conda create -n svd python=3.8.5
 conda activate svd
-cd vine/w-bench_utils/image_to_video/generative-models
+cd vine/w_bench_utils/image_to_video/generative-models
 pip3 install -r requirements/pt2.txt
 ```
 
@@ -311,7 +311,7 @@ huggingface-cli download stabilityai/stable-video-diffusion-img2vid-xt --repo-ty
 3. Run Image-to-Video Conversion:
 
 ```shell
-python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
+python vine/w_bench_utils/image_to_video/image_to_video_svd.py \
   --wm_images_folder ./vine_encoded_wbench/512/SVD_1K          \
   --edited_output_folder ./output/edited_wmed_wbench/SVD_raw 
 ```
@@ -319,7 +319,7 @@ python vine/w-bench_utils/image_to_video/image_to_video_svd.py \
 4. Post-process Video Frames:
  
 ```shell
-python vine/w-bench_utils/image_to_video/i2v_utils.py \
+python vine/w_bench_utils/image_to_video/i2v_utils.py \
   --source_folder ./output/edited_wmed_wbench/SVD_raw \
   --target_folder ./output/edited_wmed_wbench/SVD_1K
 ```
@@ -329,7 +329,7 @@ python vine/w-bench_utils/image_to_video/i2v_utils.py \
 #### Traditional Distortion (Brightness, Contrast, Blurring, Noise, Compression)
 Apply all traditional distortion techniques to the entire W-Bench dataset:
 ```shell
-python vine/w-bench_utils/distortion/distortions.py \
+python vine/w_bench_utils/distortion/distortions.py \
   --wm_images_folder ./vine_encoded_wbench          \
   --edited_output_folder ./output/distorted_wmed_wbench
 ```

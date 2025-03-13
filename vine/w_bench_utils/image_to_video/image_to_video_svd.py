@@ -48,33 +48,33 @@ def sample(
         num_frames = default(num_frames, 25)
         num_steps = default(num_steps, 30)
         output_folder = SVDxt_OUTPUT_PATH
-        model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_xt.yaml"
+        model_config = "./w_bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_xt.yaml"
         """
         elif version == "svd_image_decoder":
             num_frames = default(num_frames, 14)
             num_steps = default(num_steps, 25)
             output_folder = default(
-                output_folder, "./w-bench_utils/image_to_video/generative-models/outputs/svd_image_decoder/"
+                output_folder, "./w_bench_utils/image_to_video/generative-models/outputs/svd_image_decoder/"
             )
-            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_image_decoder.yaml"
+            model_config = "./w_bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_image_decoder.yaml"
         elif version == "svd_xt_image_decoder":
             num_frames = default(num_frames, 25)
             num_steps = default(num_steps, 30)
             output_folder = default(
-                output_folder, "./w-bench_utils/image_to_video/generative-models/outputs/svd_xt_image_decoder/"
+                output_folder, "./w_bench_utils/image_to_video/generative-models/outputs/svd_xt_image_decoder/"
             )
-            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_xt_image_decoder.yaml"
+            model_config = "./w_bench_utils/image_to_video/generative-models/scripts/sampling/configs/svd_xt_image_decoder.yaml"
         elif version == "sv3d_u":
             num_frames = 21
             num_steps = default(num_steps, 50)
             output_folder = default(output_folder, "outputs/simple_video_sample/sv3d_u/")
-            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/sv3d_u.yaml"
+            model_config = "./w_bench_utils/image_to_video/generative-models/scripts/sampling/configs/sv3d_u.yaml"
             cond_aug = 1e-5
         elif version == "sv3d_p":
             num_frames = 21
             num_steps = default(num_steps, 50)
             output_folder = default(output_folder, "outputs/simple_video_sample/sv3d_p/")
-            model_config = "./w-bench_utils/image_to_video/generative-models/scripts/sampling/configs/sv3d_p.yaml"
+            model_config = "./w_bench_utils/image_to_video/generative-models/scripts/sampling/configs/sv3d_p.yaml"
             cond_aug = 1e-5
             if isinstance(elevations_deg, float) or isinstance(elevations_deg, int):
                 elevations_deg = [elevations_deg] * num_frames
