@@ -1,7 +1,7 @@
 from PIL import Image, ImageFilter, ImageEnhance
 import numpy as np
 import torch, io, os, argparse, random
-from utils import set_random_seed, to_tensor, to_pil
+from vine.w_bench_utils.distortion.utils import set_random_seed, to_tensor, to_pil
 from tqdm import tqdm
 
 

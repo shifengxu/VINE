@@ -6,7 +6,7 @@ from PIL import Image
 from IPython import display
 import time
 import tempfile
-from utils.image_utils import to_pil
+from vine.w_bench_utils.distortion.utils.image_utils import to_pil
 
 plt.rcParams.update({"figure.max_open_warning": 0})
 
