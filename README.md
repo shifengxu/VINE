@@ -73,7 +73,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 git clone https://github.com/Shilin-LU/VINE.git
 cd VINE
 conda create -n vine python=3.10
-conda activate shilin_test
+conda activate vine
 pip install git+https://github.com/Shilin-LU/VINE
 ```
 
