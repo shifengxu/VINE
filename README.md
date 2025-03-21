@@ -377,12 +377,10 @@ All the data (watermarked, edited, and distorted images) have been uploaded publ
 ## Citation
 If you find the repo useful, please consider giving a star and citing:
 ```
-@inproceedings{
-  lu2025robust,
-  title={Robust Watermarking Using Generative Priors Against Image Editing: From Benchmarking to Advances},
-  author={Shilin Lu and Zihan Zhou and Jiayou Lu and Yuanzhi Zhu and Adams Wai-Kin Kong},
-  booktitle={The Thirteenth International Conference on Learning Representations},
-  year={2025},
-  url={https://openreview.net/forum?id=16O8GCm8Wn}
+@article{lu2024robust,
+  title={Robust watermarking using generative priors against image editing: From benchmarking to advances},
+  author={Lu, Shilin and Zhou, Zihan and Lu, Jiayou and Zhu, Yuanzhi and Kong, Adams Wai-Kin},
+  journal={arXiv preprint arXiv:2410.18775},
+  year={2024}
 }
 ```
