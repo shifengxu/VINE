@@ -32,7 +32,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 </div>
 
 ## News
-- **[Mar 02, 2025]** 😊 *W-Bench Release*: W-Bench has been officially released.
+- **[Mar 02, 2025]** 😊 *W-Bench Release*: We are releasing W-Bench! The dataset and benchmark scripts will be finalized within the next two weeks. Stay tuned for updates.
 - **[Jan 23, 2025]** 🥳 *ICLR 2025 Acceptance*: VINE has been accepted by ICLR 2025. Check the [OpenReview page](https://openreview.net/forum?id=16O8GCm8Wn) for more details.
 - **[Oct 24, 2024]** 🚀 *Checkpoint Release*: The checkpoints for VINE along with our technical report are available on [arXiv](https://arxiv.org/abs/2410.18775).
 
@@ -61,6 +61,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
       - [Traditional Distortion (Brightness, Contrast, Blurring, Noise, Compression)](#traditional-distortion-brightness-contrast-blurring-noise-compression)
     - [Decode the Entire W-Bench](#4-decode-the-entire-w-bench)
   - [Baseline Evaluation Data on W-Bench](#baseline-evaluation-data-on-w-bench)
+  - [Acknowledgement](#acknowledgement)
   - [Citation](#citation)
 
 <br>
@@ -364,15 +365,20 @@ We have evaluated **11 baseline watermarking methods + VINE-B + VINE-R** on the 
 - **Distorted Images:**  
   In addition to editing, the watermarked images were also subjected to all image distortion methods available in W-Bench. 
 
-All the data (watermarked, edited, and distorted images) have been uploaded publicly on OneDrive for easy access and further research. You can download the full dataset using the link below:
+All the data (watermarked, edited, and distorted images) have been uploaded publicly on HuggingFace for easy access and further research. You can download the full dataset using the command below:
 
-<!-- [OneDrive Baseline Evaluation Data](https://entuedu-my.sharepoint.com/:f:/g/personal/shilin002_e_ntu_edu_sg/EkJ9AIBUNglEt3sRKIBNA9oBI1BNoz2IEj9iizh4uKF-3Q?e=stTbpM) -->
-[To be updated]
+```shell
+huggingface-cli download Shilin-LU/Evaluation_Results_on_WBench --repo-type=dataset --local-dir Evaluation_Results_on_WBench
+```
 
 > **Note:** These data are provided for research purposes only. Please cite our work if you use our code and W-Bench in your research.
 
 
 <br>
+
+## Acknowledgement
+We thank the following contributors that our code is based on: [Diffusers](https://github.com/huggingface/diffusers), [WatermarkAttacker](https://github.com/XuandongZhao/WatermarkAttacker), [UltraEdit](https://github.com/HaozheZhao/UltraEdit), [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix), [MagicBrush](https://github.com/OSU-NLP-Group/MagicBrush), [SVD](https://github.com/Stability-AI/generative-models).
+
 
 ## Citation
 If you find the repo useful, please consider giving a star and citing:
