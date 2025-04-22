@@ -32,7 +32,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
 </div>
 
 ## News
-- **[Mar 02, 2025]** 😊 *W-Bench Release*: We are releasing W-Bench! The dataset and benchmark scripts will be finalized within the next two weeks. Stay tuned for updates.
+- **[Mar 02, 2025]** 😊 *W-Bench Release*: [W-Bench](https://huggingface.co/datasets/Shilin-LU/W-Bench) has been officially released.
 - **[Jan 23, 2025]** 🥳 *ICLR 2025 Acceptance*: VINE has been accepted by ICLR 2025. Check the [OpenReview page](https://openreview.net/forum?id=16O8GCm8Wn) for more details.
 - **[Oct 24, 2024]** 🚀 *Checkpoint Release*: The checkpoints for VINE along with our technical report are available on [arXiv](https://arxiv.org/abs/2410.18775).
 
@@ -377,7 +377,7 @@ huggingface-cli download Shilin-LU/Evaluation_Results_on_WBench --repo-type=data
 <br>
 
 ## Acknowledgement
-We thank the following contributors that our code is based on: [Diffusers](https://github.com/huggingface/diffusers), [WatermarkAttacker](https://github.com/XuandongZhao/WatermarkAttacker), [UltraEdit](https://github.com/HaozheZhao/UltraEdit), [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix), [MagicBrush](https://github.com/OSU-NLP-Group/MagicBrush), [SVD](https://github.com/Stability-AI/generative-models).
+We thank the following contributors that our code and benchmark are based on: [Diffusers](https://github.com/huggingface/diffusers), [WatermarkAttacker](https://github.com/XuandongZhao/WatermarkAttacker), [UltraEdit](https://github.com/HaozheZhao/UltraEdit), [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix), [MagicBrush](https://github.com/OSU-NLP-Group/MagicBrush), [SVD](https://github.com/Stability-AI/generative-models).
 
 
 ## Citation
