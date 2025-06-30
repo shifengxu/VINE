@@ -1,0 +1,24 @@
+Steps:   0%|          | 1000/14000000 [50:58<11942:48:35,  3.07s/it, train_chart/bit_acc=0.989, train_chart/image_loss=17.6, train_chart/loss=0.119, train_chart/loss_gan=0.125, train_chart/lpips_loss=0.87, train_chart/psnr=6.75, train_chart/secret_loss=0.119, train_chart/str_acc=0.214]Traceback (most recent call last):
+[TRAINING] Warmup - using fixed input image for now!
+[TRAINING] Activating TransformNet at step 1
+[TRAINING] High bit acc (0.9028571428571428) achieved, switch to full image dataset training.
+Saving checkpoint to output/formal_training/checkpoint-1000
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 544, in <module>
+    main(args)
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 420, in main
+    accelerator.save_state(save_path)
+  File "/export/home2/shilin/anaconda3/envs/vine/lib/python3.10/site-packages/accelerate/accelerator.py", line 2945, in save_state
+    hook(self._models, weights, output_dir)
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 123, in save_model_hook
+    if isinstance(model, type(unwrap_model(sec_encoder))):
+NameError: name 'sec_encoder' is not defined. Did you mean: 'VAE_encode'?
+Traceback (most recent call last):
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 544, in <module>
+    main(args)
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 420, in main
+    accelerator.save_state(save_path)
+  File "/export/home2/shilin/anaconda3/envs/vine/lib/python3.10/site-packages/accelerate/accelerator.py", line 2945, in save_state
+    hook(self._models, weights, output_dir)
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 123, in save_model_hook
+    if isinstance(model, type(unwrap_model(sec_encoder))):
+NameError: name 'sec_encoder' is not defined. Did you mean: 'VAE_encode'?

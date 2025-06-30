@@ -1,0 +1,11 @@
+{"time":"2025-06-30T15:13:04.130284617+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/export/home2/shilin/nips24/VINE/wandb/run-20250630_151303-06tpmxj4/logs/debug-core.log"}
+{"time":"2025-06-30T15:13:04.461309179+08:00","level":"INFO","msg":"stream: created new stream","id":"06tpmxj4"}
+{"time":"2025-06-30T15:13:04.46134158+08:00","level":"INFO","msg":"stream: started","id":"06tpmxj4"}
+{"time":"2025-06-30T15:13:04.46135225+08:00","level":"INFO","msg":"handler: started","stream_id":"06tpmxj4"}
+{"time":"2025-06-30T15:13:04.461356498+08:00","level":"INFO","msg":"sender: started","stream_id":"06tpmxj4"}
+{"time":"2025-06-30T15:13:04.461365294+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"06tpmxj4"}
+{"time":"2025-06-30T15:13:04.745866561+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T15:13:09.288335904+08:00","level":"INFO","msg":"stream: closing","id":"06tpmxj4"}
+{"time":"2025-06-30T15:13:09.288389424+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-30T15:13:09.288526772+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-30T15:13:10.810957789+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}

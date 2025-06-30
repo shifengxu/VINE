@@ -39,3 +39,5 @@ dependencies:
       - scikit-learn
       - ipykernel
       - sentencepiece
+      - bchlib==0.7
+      - easydict

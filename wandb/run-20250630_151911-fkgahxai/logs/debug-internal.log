@@ -1,0 +1,7 @@
+{"time":"2025-06-30T15:19:12.202887795+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/export/home2/shilin/nips24/VINE/wandb/run-20250630_151911-fkgahxai/logs/debug-core.log"}
+{"time":"2025-06-30T15:19:12.541368568+08:00","level":"INFO","msg":"stream: created new stream","id":"fkgahxai"}
+{"time":"2025-06-30T15:19:12.541404125+08:00","level":"INFO","msg":"stream: started","id":"fkgahxai"}
+{"time":"2025-06-30T15:19:12.541413683+08:00","level":"INFO","msg":"sender: started","stream_id":"fkgahxai"}
+{"time":"2025-06-30T15:19:12.541402282+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"fkgahxai"}
+{"time":"2025-06-30T15:19:12.541421758+08:00","level":"INFO","msg":"handler: started","stream_id":"fkgahxai"}
+{"time":"2025-06-30T15:19:12.838560204+08:00","level":"INFO","msg":"Starting system monitor"}

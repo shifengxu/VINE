@@ -45,6 +45,7 @@ Current image watermarking methods are vulnerable to advanced image editing tech
     - [Creating a Conda Environment](#creating-a-conda-environment)
     - [Downloading VINE Checkpoints](#downloading-vine-checkpoints)
   - [Demo](#demo)
+  - [Training](#training)
   - [Inference](#inference)
     - [Watermark Encoding](#watermark-encoding)
     - [Image Editing](#image-editing)
@@ -76,6 +77,11 @@ cd VINE
 conda create -n vine python=3.10
 conda activate vine
 pip install git+https://github.com/Shilin-LU/VINE
+
+# To train the model, you also need to install the following package:
+conda activate vine
+cd vine/src/training_src/imagenet_c
+pip install -e .
 ```
 
 > **Tip:** Note that when editing images using MagicBrush and SVD, the environment should use the specific environments listed in their respective sections below. In all other cases, the **vine** environment is sufficient to run all code, including watermark encoding, decoding, regeneration, local editing, and other global editing tasks.
@@ -90,6 +96,19 @@ Our models, VINE-B and VINE-R, have been released on HuggingFace ([VINE-B-Enc](h
 An interactive [Colab demo](https://colab.research.google.com/github/Shilin-LU/VINE/blob/main/demo_colab.ipynb) is available. It walks you through watermark encoding, image editing, watermark decoding, and quality metrics calculation. This demo is a starting point to familiarize yourself with the workflow.
 
 <br>
+
+## Training
+
+### Pre-training
+```shell
+export TORCH_HOME=$(pwd) && export PYTHONPATH=$(pwd)
+accelerate launch --num_processes=8 --main_process_port 17736 vine/src/train.py --enable_xformers_memory_efficient_attention --train_batch_size 14 --secret_loss_scale 1.5 --G_loss_scale 0.5 --l2_loss_scale 2.0 --lpips_loss_scale 1.5 --tracker_project_name pretraining --key_change pretraining --learning_rate 1e-4 --output_dir output/pretraining --fixed_input
+```
+
+### Fine-tuning
+```shell
+accelerate launch --num_processes=8 --main_process_port 17358 vine/src/finetune.py --enable_xformers_memory_efficient_attention --train_batch_size 20 --secret_loss_scale 1.5 --G_loss_scale 0.5 --l2_loss_scale 2.0 --lpips_loss_scale 1.5 --tracker_project_name finetuning --key_change finetuning --learning_rate 1e-4 --output_dir output/finetune --no_im_loss_steps 0 --fixed_input --imagenetc_step 500000000 --l2_loss_ramp 1 --l2_edge_ramp 1 --G_loss_ramp 1
+```
 
 ## Inference
 
@@ -377,7 +396,7 @@ huggingface-cli download Shilin-LU/Evaluation_Results_on_WBench --repo-type=data
 <br>
 
 ## Acknowledgement
-We thank the following contributors that our code and benchmark are based on: [Diffusers](https://github.com/huggingface/diffusers), [WatermarkAttacker](https://github.com/XuandongZhao/WatermarkAttacker), [UltraEdit](https://github.com/HaozheZhao/UltraEdit), [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix), [MagicBrush](https://github.com/OSU-NLP-Group/MagicBrush), [SVD](https://github.com/Stability-AI/generative-models).
+We thank the following contributors that our code and benchmark are based on: [Diffusers](https://github.com/huggingface/diffusers), [img2img-turbo](https://github.com/GaParmar/img2img-turbo), [WatermarkAttacker](https://github.com/XuandongZhao/WatermarkAttacker), [UltraEdit](https://github.com/HaozheZhao/UltraEdit), [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix), [MagicBrush](https://github.com/OSU-NLP-Group/MagicBrush), [SVD](https://github.com/Stability-AI/generative-models).
 
 
 ## Citation

@@ -1,0 +1,15 @@
+{"time":"2025-06-30T15:16:30.223437064+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/export/home2/shilin/nips24/VINE/wandb/run-20250630_151629-nwlgpia4/logs/debug-core.log"}
+{"time":"2025-06-30T15:16:30.564327118+08:00","level":"INFO","msg":"stream: created new stream","id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:30.564352385+08:00","level":"INFO","msg":"stream: started","id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:30.564363316+08:00","level":"INFO","msg":"handler: started","stream_id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:30.564367653+08:00","level":"INFO","msg":"sender: started","stream_id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:30.564382031+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:30.954232211+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T15:16:35.640946557+08:00","level":"INFO","msg":"stream: closing","id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:35.640994537+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-30T15:16:35.641117097+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-30T15:16:37.167724941+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-30T15:16:37.439236233+08:00","level":"INFO","msg":"handler: closed","stream_id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:37.439278182+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:37.439291026+08:00","level":"INFO","msg":"sender: closed","stream_id":"nwlgpia4"}
+{"time":"2025-06-30T15:16:37.439900447+08:00","level":"INFO","msg":"stream: closed","id":"nwlgpia4"}

@@ -1,0 +1,31 @@
+Steps:   0%|          | 0/14000000 [00:00<?, ?it/s]Traceback (most recent call last):
+[TRAINING] Warmup - using fixed input image for now!
+14
+torch.Size([4, 32, 32])
+torch.Size([14, 4, 32, 32])
+torch.Size([1])
+torch.Size([14, 4, 32, 32])
+14
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 544, in <module>
+    main(args)
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 292, in main
+    encoded_image = watermark_encoder(img_a, secret)
+  File "/export/home2/shilin/anaconda3/envs/vine/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/export/home2/shilin/nips24/VINE/vine/src/vine_turbo.py", line 225, in forward
+    x_out = torch.stack([self.sched.step(model_pred[i], self.timesteps[i], x_enc[i], return_dict=True).prev_sample for i in range(B)])
+  File "/export/home2/shilin/nips24/VINE/vine/src/vine_turbo.py", line 225, in <listcomp>
+    x_out = torch.stack([self.sched.step(model_pred[i], self.timesteps[i], x_enc[i], return_dict=True).prev_sample for i in range(B)])
+IndexError: index 1 is out of bounds for dimension 0 with size 1
+Traceback (most recent call last):
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 544, in <module>
+    main(args)
+  File "/export/home2/shilin/nips24/VINE/vine/src/train.py", line 292, in main
+    encoded_image = watermark_encoder(img_a, secret)
+  File "/export/home2/shilin/anaconda3/envs/vine/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/export/home2/shilin/nips24/VINE/vine/src/vine_turbo.py", line 225, in forward
+    x_out = torch.stack([self.sched.step(model_pred[i], self.timesteps[i], x_enc[i], return_dict=True).prev_sample for i in range(B)])
+  File "/export/home2/shilin/nips24/VINE/vine/src/vine_turbo.py", line 225, in <listcomp>
+    x_out = torch.stack([self.sched.step(model_pred[i], self.timesteps[i], x_enc[i], return_dict=True).prev_sample for i in range(B)])
+IndexError: index 1 is out of bounds for dimension 0 with size 1

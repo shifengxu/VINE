@@ -1,0 +1,11 @@
+{"time":"2025-06-30T15:15:56.230019757+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/export/home2/shilin/nips24/VINE/wandb/run-20250630_151555-vgdcyil6/logs/debug-core.log"}
+{"time":"2025-06-30T15:15:56.565322244+08:00","level":"INFO","msg":"stream: created new stream","id":"vgdcyil6"}
+{"time":"2025-06-30T15:15:56.565351579+08:00","level":"INFO","msg":"stream: started","id":"vgdcyil6"}
+{"time":"2025-06-30T15:15:56.565367028+08:00","level":"INFO","msg":"sender: started","stream_id":"vgdcyil6"}
+{"time":"2025-06-30T15:15:56.565363802+08:00","level":"INFO","msg":"handler: started","stream_id":"vgdcyil6"}
+{"time":"2025-06-30T15:15:56.565388869+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"vgdcyil6"}
+{"time":"2025-06-30T15:15:56.875069982+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T15:16:01.673251961+08:00","level":"INFO","msg":"stream: closing","id":"vgdcyil6"}
+{"time":"2025-06-30T15:16:01.673290924+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-30T15:16:01.673345667+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-30T15:16:03.215964269+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}

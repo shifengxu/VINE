@@ -1,0 +1,238 @@
+_wandb:
+    value:
+        cli_version: 0.20.1
+        m: []
+        python_version: 3.10.4
+        t:
+            "1":
+                - 1
+                - 5
+                - 9
+                - 11
+                - 41
+                - 49
+                - 53
+                - 71
+                - 79
+                - 83
+                - 98
+                - 105
+            "2":
+                - 1
+                - 5
+                - 9
+                - 11
+                - 41
+                - 49
+                - 53
+                - 71
+                - 79
+                - 83
+                - 98
+                - 105
+            "3":
+                - 13
+                - 55
+            "4": 3.10.4
+            "5": 0.20.1
+            "6": 4.43.3
+            "12": 0.20.1
+            "13": linux-x86_64
+G_loss_ramp:
+    value: 100000
+G_loss_scale:
+    value: 0.5
+N_blur:
+    value: 7
+adam_beta1:
+    value: 0.9
+adam_beta2:
+    value: 0.999
+adam_epsilon:
+    value: 1e-08
+adam_weight_decay:
+    value: 0.01
+allow_tf32:
+    value: false
+borders:
+    value: black
+checkpoint:
+    value: null
+checkpointing_steps:
+    value: 1000
+checkpoints_total_limit:
+    value: 10
+contrast_high:
+    value: 1.5
+contrast_low:
+    value: 0.5
+contrast_ramp:
+    value: 10000
+crop_resize_step:
+    value: 500000000
+cuda:
+    value: true
+dataloader_num_workers:
+    value: 8
+dataset_folder:
+    value: /export/home2/shilin/Datasets/mirflickr
+enable_xformers_memory_efficient_attention:
+    value: true
+fixed_input:
+    value: true
+gan_disc_type:
+    value: vagan_clip
+gan_loss_type:
+    value: multilevel_sigmoid
+gradient_accumulation_steps:
+    value: 1
+gradient_checkpointing:
+    value: false
+ic_up_level_interval:
+    value: 10000
+ig_filter_step:
+    value: 50000000
+imagenetc_step:
+    value: 5000
+jpeg_quality:
+    value: 50
+jpeg_quality_ramp:
+    value: 10000
+key_change:
+    value: formal_training
+l2_edge_delay:
+    value: 20000000000
+l2_edge_gain:
+    value: 10
+l2_edge_ramp:
+    value: 100000
+l2_loss_ramp:
+    value: 100000
+l2_loss_scale:
+    value: 2
+lambda_cycle:
+    value: 1
+lambda_cycle_lpips:
+    value: 10
+lambda_gan:
+    value: 0.5
+lambda_idt:
+    value: 1
+lambda_idt_lpips:
+    value: 1
+learning_rate:
+    value: 0.0001
+logging_dir:
+    value: logs
+lora_rank_unet:
+    value: 1
+lora_rank_vae:
+    value: 1
+lpips_loss_ramp:
+    value: 100000
+lpips_loss_scale:
+    value: 1.5
+lr_num_cycles:
+    value: 1
+lr_power:
+    value: 1
+lr_scheduler:
+    value: constant
+lr_step_rules:
+    value: 1:10000,0.1
+lr_warmup_steps:
+    value: 500
+max_grad_norm:
+    value: 1
+max_train_epochs:
+    value: 1000
+max_train_steps:
+    value: 14000000
+mixed_precision:
+    value: "no"
+no_bright:
+    value: false
+no_contrast:
+    value: false
+no_falloff_im:
+    value: false
+no_gan:
+    value: false
+no_gaussianNoise:
+    value: false
+no_im_loss_steps:
+    value: 1000
+no_jpeg:
+    value: false
+no_motionBlur:
+    value: false
+no_perspective:
+    value: false
+no_saturation:
+    value: false
+output_dir:
+    value: output/formal_training
+pretrained:
+    value: null
+pretrained_model_name_or_path:
+    value: stabilityai/sd-turbo
+report_to:
+    value: wandb
+resolution:
+    value: 256
+resume_from_checkpoint:
+    value: null
+revision:
+    value: null
+rnd_bri:
+    value: 0.3
+rnd_bri_ramp:
+    value: 10000
+rnd_hue:
+    value: 0.1
+rnd_hue_ramp:
+    value: 10000
+rnd_noise:
+    value: 0.02
+rnd_noise_ramp:
+    value: 10000
+rnd_sat:
+    value: 1
+rnd_sat_ramp:
+    value: 10000
+rnd_trans:
+    value: 0.1
+rnd_trans_ramp:
+    value: 10000
+secret_loss_scale:
+    value: 1.5
+secret_size:
+    value: 100
+seed:
+    value: 42
+tracker_project_name:
+    value: watermarking_archi_nabi
+train_batch_size:
+    value: 14
+train_img_prep:
+    value: resize_286_randomcrop_256x256_hflip
+u_scale:
+    value: 100
+use_rgb_Imageloss:
+    value: false
+v_scale:
+    value: 100
+val_folder:
+    value: /export/home2/shilin/Datasets/val_set
+val_img_prep:
+    value: no_resize
+validation_num_images:
+    value: -1
+validation_steps:
+    value: 1e+09
+variant:
+    value: null
+viz_freq:
+    value: 1e+09
+y_scale:
+    value: 1

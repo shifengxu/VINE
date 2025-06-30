@@ -1,0 +1,15 @@
+{"time":"2025-06-30T17:10:41.582972411+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/export/home2/shilin/nips24/VINE/wandb/run-20250630_171041-jcd0t649/logs/debug-core.log"}
+{"time":"2025-06-30T17:10:41.916790298+08:00","level":"INFO","msg":"stream: created new stream","id":"jcd0t649"}
+{"time":"2025-06-30T17:10:41.916833739+08:00","level":"INFO","msg":"stream: started","id":"jcd0t649"}
+{"time":"2025-06-30T17:10:41.916858816+08:00","level":"INFO","msg":"sender: started","stream_id":"jcd0t649"}
+{"time":"2025-06-30T17:10:41.916857643+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"jcd0t649"}
+{"time":"2025-06-30T17:10:41.916868554+08:00","level":"INFO","msg":"handler: started","stream_id":"jcd0t649"}
+{"time":"2025-06-30T17:10:42.226642784+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-30T18:01:41.627366075+08:00","level":"INFO","msg":"stream: closing","id":"jcd0t649"}
+{"time":"2025-06-30T18:01:41.627408234+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-30T18:01:41.627517088+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-30T18:01:42.400706529+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-30T18:01:42.974981521+08:00","level":"INFO","msg":"handler: closed","stream_id":"jcd0t649"}
+{"time":"2025-06-30T18:01:42.975017397+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"jcd0t649"}
+{"time":"2025-06-30T18:01:42.975055869+08:00","level":"INFO","msg":"sender: closed","stream_id":"jcd0t649"}
+{"time":"2025-06-30T18:01:42.975572295+08:00","level":"INFO","msg":"stream: closed","id":"jcd0t649"}
