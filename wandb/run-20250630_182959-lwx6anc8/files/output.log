@@ -1,7 +1,0 @@
-Steps:   0%|          | 3302/14000000 [2:57:54<12657:13:31,  3.26s/it, train_chart/bit_acc=0.999, train_chart/image_loss=0.429, train_chart/loss=0.0723, train_chart/loss_D=-0.0224, train_chart/loss_gan=-0.0174, train_chart/lpips_loss=0.626, train_chart/psnr=15.3, train_chart/secret_loss=0.00886, train_chart/str_acc=0.857]  
-[TRAINING] Warmup - using fixed input image for now!
-[TRAINING] Activating TransformNet at step 1
-[TRAINING] High bit acc (0.9021428571428571) achieved, switch to full image dataset training.
-Saving checkpoint to output/formal_training/checkpoint-1000
-Saving checkpoint to output/formal_training/checkpoint-2000
-Saving checkpoint to output/formal_training/checkpoint-3000

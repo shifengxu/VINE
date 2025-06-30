@@ -1,7 +1,0 @@
-{"time":"2025-06-30T15:18:35.352386959+08:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/export/home2/shilin/nips24/VINE/wandb/run-20250630_151835-msw943hh/logs/debug-core.log"}
-{"time":"2025-06-30T15:18:35.68643128+08:00","level":"INFO","msg":"stream: created new stream","id":"msw943hh"}
-{"time":"2025-06-30T15:18:35.686455886+08:00","level":"INFO","msg":"stream: started","id":"msw943hh"}
-{"time":"2025-06-30T15:18:35.686464201+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"msw943hh"}
-{"time":"2025-06-30T15:18:35.686475432+08:00","level":"INFO","msg":"sender: started","stream_id":"msw943hh"}
-{"time":"2025-06-30T15:18:35.686484048+08:00","level":"INFO","msg":"handler: started","stream_id":"msw943hh"}
-{"time":"2025-06-30T15:18:36.007085288+08:00","level":"INFO","msg":"Starting system monitor"}
