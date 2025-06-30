@@ -12,3 +12,4 @@ example/watermarked_img
 example/distorted_watermarked_img
 original_imgs/
 watermarked_imgs/
+wandb/
