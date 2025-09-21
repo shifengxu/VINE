@@ -46,7 +46,7 @@ setup(
         "ipykernel",
         "sentencepiece",
         "pytorch-lightning==1.2.9",
-        "bchlib==0.7",
+        "bchlib",
         "easydict",
         "clip @ git+https://github.com/openai/CLIP.git",
         # Install diffusers from the VINE repository's diffusers subdirectory
